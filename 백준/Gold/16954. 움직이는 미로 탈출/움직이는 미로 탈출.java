@@ -21,8 +21,8 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         arr=new char[8][8]; // 미로를 나타내는 2차원 배열 (. : 가능, # : 불가능)
         boolean visited[][] = new boolean[8][8]; // 방문 여부 판단하는 2차원 배열
-        int[] dx={1,1,-1,-1,0,0,1,-1,0};
-        int[] dy={-1,1,-1,1,1,-1,0,0,0};
+        int[] dx={1,1,-1,-1,0,0,-1,0};
+        int[] dy={-1,1,-1,1,1,-1,0,0};
 
         for(int i=0;i<8;i++){
             arr[i]=br.readLine().toCharArray();
@@ -43,7 +43,7 @@ public class Main {
 	                return;
 	            }
 	            
-	            for(int d=0;d<9;d++){
+	            for(int d=0;d<8;d++){
 	                int nx=tmp.x + dx[d];
 	                int ny=tmp.y + dy[d];
 	                if(nx>=0 && nx<8 && ny>=0 && ny<8){
