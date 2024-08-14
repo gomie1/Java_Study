@@ -29,15 +29,15 @@ public class Main {
             System.out.println();
             return;
         }
-        
-        for(int i = 1; i <= N; i++) {
-            if(!isSelected[i]) {
-                numbers[cnt] = i;
-                isSelected[i] = true;
-                permutation(cnt+1);
-                isSelected[i] = false;
+        else {
+            for(int i = 1; i <= N; i++) {
+                if(!isSelected[i]) {
+                    numbers[cnt] = i;
+                    isSelected[i] = true;
+                    permutation(cnt+1);
+                    isSelected[i] = false;
+                }
             }
         }
     }
-
 }
