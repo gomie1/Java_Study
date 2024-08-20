@@ -40,10 +40,6 @@ public class Main {
 	}
 
 	private static void dfs(int x, int y, int cnt, int sum) {
-		if(cnt > 4) {
-			return;
-		}
-		
 		// 상, 하, 좌, 우로 움직여서 4칸을 만들었기 때문에 무조건 블록!
 		if(cnt == 4) {
 			//System.out.println("여기 드렁옴" + sum);
