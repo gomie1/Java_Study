@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 public class Solution {
 
     static int N, arr[][], res;
-    static ArrayList<Integer> numbers;
+    static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,7 +26,7 @@ public class Solution {
                 }
             }
 
-            numbers = new ArrayList<>();
+            visited = new boolean[N];
             res = Integer.MAX_VALUE;
             dfs(0, 0);
 
@@ -40,20 +40,22 @@ public class Solution {
             return;
         }
 
-        if(cnt == N/2) { // 재료의 반만큼 선택했다면
-            ArrayList<Integer> other = new ArrayList<>();
-            for(int i = 0; i < N; i++) { // 나머지 재료들을 other에 담아줌
-                if(!numbers.contains(i)) {
-                    other.add(i);
-                }
-            }
-
-            // 맛 계산
+        if(cnt == N/2) { // 재료의 반만큼 선택했다면 맛 계산
             int A = 0, B = 0;
-            for(int i = 0; i < N/2; i++) {
-                for(int j = i+1; j < N/2; j++) {
-                    A += arr[numbers.get(i)][numbers.get(j)] + arr[numbers.get(j)][numbers.get(i)];
-                    B += arr[other.get(i)][other.get(j)] + arr[other.get(j)][other.get(i)];
+            for(int i = 0; i < N; i++) {
+                if(visited[i]) { // A 재료들
+                    for(int j = i+1; j < N; j++) {
+                        if(visited[j]) {
+                            A += arr[i][j] + arr[j][i];
+                        }
+                    }
+                }
+                else { // B 재료들
+                    for(int j = i+1; j < N; j++) {
+                        if(!visited[j]) {
+                            B += arr[i][j] + arr[j][i];
+                        }
+                    }
                 }
             }
 
@@ -62,11 +64,11 @@ public class Solution {
         }
 
         // 현재 재료를 선택하는 경우
-        numbers.add(idx);
+        visited[idx] = true;
         dfs(idx+1, cnt+1);
 
         // 현재 재료를 선택하지 않는 경우
-        numbers.remove(numbers.indexOf(idx));
+        visited[idx] = false;
         dfs(idx+1, cnt);
     }
 }
