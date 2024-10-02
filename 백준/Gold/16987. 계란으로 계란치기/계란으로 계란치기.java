@@ -38,9 +38,8 @@ public class Main {
 
     // idx : 계란 번호, cnt : 깨진 계란 개수
     private static void dfs(int idx, int cnt) {
-        if(res < cnt) res = cnt; // 최대값 갱신
-
-        if(idx == N) { // 가장 최근에 든 계란이 가장 오른쪽에 위치한 계란인 경우
+        if(idx == N || cnt == N-1) { // 가장 최근에 든 계란이 가장 오른쪽에 위치한 계란인 경우
+            if(res < cnt) res = cnt; // 최대값 갱신
             return; // 종료
         }
 
