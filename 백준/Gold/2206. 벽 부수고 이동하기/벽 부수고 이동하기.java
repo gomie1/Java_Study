@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -31,7 +32,13 @@ public class Main {
     }
 
     private static void bfs(int start_x, int start_y, int cnt) {
-        Queue<int[]> queue = new LinkedList<>();
+        //Queue<int[]> queue = new LinkedList<>();
+        PriorityQueue<int []> queue = new PriorityQueue<>((o1, o2) -> {
+            int abs1 = o1[2];
+            int abs2 = o2[2];
+
+            return abs1 > abs2 ? 1 : -1;
+        });
         visited[start_x][start_y][0] = true;
         queue.offer(new int[] {start_x, start_y, cnt, 0});
         while(!queue.isEmpty()) {
