@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    private static int N, M, num[], sum[];
+    private static int N, M, sum[];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,15 +13,9 @@ public class Main {
         M = Integer.parseInt(st.nextToken()); // 합을 구해야하는 횟수
 
         st = new StringTokenizer(br.readLine());
-        num = new int[N+1];
         sum = new int[N+1];
         for (int i = 1; i <= N; i++) {
-            num[i] = Integer.parseInt(st.nextToken());
-            if(i == 1) {
-                sum[i] = num[i];
-            } else {
-                sum[i] += sum[i-1] + num[i];
-            }
+            sum[i] += Integer.parseInt(st.nextToken()) + sum[i-1];
         }
 
         for (int i = 0; i < M; i++) {
