@@ -35,14 +35,8 @@ public class Main {
 	private static void permutation(int cnt) { // cnt: 현재 선수 번호
 		if(cnt == 10) { // 1~9번 선수를 다 배정했다면 종료
 			int ans = play();
-			//System.out.println(Arrays.toString(isSelected));
 			if(res < ans) {
 				res = ans;
-				/*
-				for(int i : isSelected) {
-					System.out.print(i + " ");
-				}
-				System.out.println();*/
 			}
 			return;
 		}
@@ -88,9 +82,8 @@ public class Main {
 					
 					if(status[1]) { // 1루에 선수가 있다면
 						status[2] = true; // 1루에 있던 선수가 2루로 이동
-						// 1루에는 홈에 있던 선수가 이동하기 때문에 false로 변경 X
 					}
-					status[1] = true;
+					status[1] = true; // 홈에 있던 선수가 1루로 이동
 					break;
 				case 2: // 2루타
 					if(status[3]) { // 3루에 선수가 있다면
@@ -100,19 +93,17 @@ public class Main {
 					
 					if(status[2]) { // 2루에 선수가 있다면
 						curScore++; // 2루에 있던 선수가 홈으로 가므로 1점 획득
-						// 2루에는 홈에 있던 선수가 이동하기 때문에 false로 변경 X
 					}
 					
 					if(status[1]) { // 1루에 선수가 있다면
 						status[3] = true; // 1루에 있던 선수가 3루로 이동
 						status[1] = false;
 					}
-					status[2] = true;
+					status[2] = true; // 홈에 있던 선수가 2루로 이동
 					break;
 				case 3: // 3루타
 					if(status[3]) { // 3루에 선수가 있다면
 						curScore++; // 3루에 있던 선수가 홈으로 가므로 1점 획득
-						// 3루에는 홈에 있던 선수가 이동하기 때문에 false로 변경 X
 					}
 					
 					if(status[2]) { // 2루에 선수가 있다면
@@ -124,7 +115,7 @@ public class Main {
 						curScore++; // 1루에 있던 선수가 홈으로 가므로 1점 획득
 						status[1] = false;
 					}
-					status[3] = true;
+					status[3] = true; // 홈에 있던 선수가 3루로 이동
 					break;
 				case 4: // 홈런
 					if(status[3]) { // 3루에 선수가 있다면
