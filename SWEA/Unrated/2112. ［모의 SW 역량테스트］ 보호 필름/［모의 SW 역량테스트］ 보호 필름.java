@@ -53,8 +53,8 @@ public class Solution {
         subset(depth+1);
     }
 
-    // selected = {0, 1, 1, 0, 0, 0, 1, 1}
     private static void dfs(int idx, int cnt) {
+        if(res <= cnt) return;
         if(idx == D) {
             if(isPass())
                 if(res > cnt) res = cnt;
