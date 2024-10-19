@@ -25,8 +25,7 @@ public class Solution {
                 boolean flag = false;
                 for (int i = 0; i < 100; i++) {
                     if(arr[i][j] == 2) { // 현재 자성체가 S극일 때
-                        if(!flag) continue; // N극 자성체를 만난적이 없다면 테이블 아래로 떨어짐
-                        else {
+                        if(flag) {
                             res++; // N극 자성체를 만난적이 있다면 교착상태가 됨
                             flag = false; // 새로운 교착상태가 있을 수 있으므로 flag 초기화
                         }
