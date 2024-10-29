@@ -14,24 +14,21 @@ public class Main {
     static class fish implements Comparable<fish> {
         int x;
         int y;
-        int size;
+        int dist;
 
-        fish(int x, int y, int size) {
+        fish(int x, int y, int dist) {
             this.x = x;
             this.y = y;
-            this.size = size;
+            this.dist = dist;
         }
 
         // 거리가 가까운 물고기가 많다면 가장 위에 있는 물고기
         // 그러한 물고기가 여러 마리라면 가장 왼쪽에 있는 물고기를 먹음
         @Override
         public int compareTo(fish o) {
-            if(this.x != o.x) {
-                return this.x - o.x;
-            }
-            else {
-                return this.y - o.y;
-            }
+            if(this.dist != o.dist) return this.dist - o.dist;
+            if(this.x != o.x) return this.x - o.x;
+            return this.y - o.y;
         }
     }
 
@@ -52,7 +49,7 @@ public class Main {
 
                 // 물고기들의 정보 저장
                 if(arr[i][j] != 0 && arr[i][j] != 9) {
-                    fishInfo.add(new fish(i, j, arr[i][j]));
+                    fishInfo.add(new fish(i, j, Integer.MAX_VALUE));
                 }
 
                 // 아기 상어의 초기 위치 저장
@@ -70,43 +67,24 @@ public class Main {
     }
 
     private static void BabyShark(int x, int y) {
-        ArrayList<fish> isPossible = new ArrayList<>(); // 먹을 수 있는 물고기의 정보를 담을 리스트
+        PriorityQueue<fish> isPossible = new PriorityQueue<>(); // 먹을 수 있는 물고기의 정보를 담을 큐
         int cnt = 0; // 아기 상어가 먹은 물고기의 수
 
         while(true) {
-            // 1. 먹을 수 있는 물고기들을 추출
+            // 1. 먹을 수 있는 물고기들을 추출 (우선순위 큐로 현재 아기 상어와의 거리가 짧은 순서대로 입력)
             for (fish f : fishInfo) {
-                if(f.size < shark) { // 아기 상어는 자신보다 작은 물고기만 먹을 수 있음
-                    isPossible.add(f);
+                if(arr[f.x][f.y] < shark) { // 아기 상어는 자신보다 작은 물고기만 먹을 수 있음
+                    f.dist = bfs(x, y, f);
+                    isPossible.offer(f);
                 }
             }
 
-            // 2. 먹을 수 있는 물고기가 없다면 종료 (엄마 상어에게 도움 요청!)
-            if(isPossible.size() == 0) break;
+            // 2. 먹을 수 있는 물고기가 없거나 사방이 아기상어보다 큰 물고기들로 막혀서 이동할 수 없다면 종료
+            if(isPossible.size() == 0 || isPossible.peek().dist == Integer.MAX_VALUE) break;
 
-            // * 먹을 수 있는 물고기가 1마리라면, 그 물고기를 먹으러 감
-            // * 먹을 수 있는 물고기가 1마리보다 많다면, 거리가 가장 가까운 물고기를 먹으러 감
-
-            // 3. 먹을 수 있는 물고기가 있다면, 아기 상어로부터 각 물고기까지의 최단거리를 구함
-            int[] dist = new int[isPossible.size()];
-            int minDist = Integer.MAX_VALUE;
-            for (int i = 0; i < isPossible.size(); i++) {
-                dist[i] = bfs(x, y, isPossible.get(i));
-                if(dist[i] < minDist) minDist = dist[i];
-            }
-            if(minDist == Integer.MAX_VALUE) break; // 사방이 아기상어보다 큰 물고기들로 막혀서 이동할 수 없다면 종료
-
-            // 4. 먹을 수 있는 물고기들 중 거리가 가장 가까운 물고기들만 추출
-            ArrayList<fish> ans = new ArrayList<>();
-            for (int i = 0; i < dist.length; i++) {
-                if(dist[i] == minDist) ans.add(isPossible.get(i));
-            }
-
-            // 5. 물고기 정렬
-            Collections.sort(ans);
-
-            // 6. 맨 앞 물고기를 먹고, 아기 상어의 현재 위치 갱신
-            fishInfo.remove(fishInfo.indexOf(ans.get(0)));
+            // 3. 맨 앞 물고기를 먹고, 아기 상어의 현재 위치 갱신
+            fish eatFish = isPossible.poll();
+            fishInfo.remove(fishInfo.indexOf(eatFish));
             cnt++;
             if(cnt == shark) { // 아기 상어는 자신의 크기와 같은 수의 물고기를 먹을 때 마다 크기가 1 증가
                 shark++;
@@ -114,11 +92,11 @@ public class Main {
             }
 
             arr[x][y] = 0;
-            x = ans.get(0).x;
-            y = ans.get(0).y;
+            x = eatFish.x;
+            y = eatFish.y;
             arr[x][y] = 9;
 
-            res += minDist; // 결과에 최소 거리만큼의 이동시간을 더해줌
+            res += eatFish.dist; // 결과에 최소 거리만큼의 이동시간을 더해줌
             isPossible.clear();
         }
     }
