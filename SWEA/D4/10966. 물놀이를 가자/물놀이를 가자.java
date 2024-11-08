@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -23,7 +24,7 @@ public class Solution {
 			M = Integer.parseInt(st.nextToken());
 			
 			map = new char[N][M];
-			q = new LinkedList<>();
+			q = new ArrayDeque<>();
 			for(int i = 0; i < N; i++) {
 				map[i] = br.readLine().toCharArray();
 				for(int j = 0; j < M; j++) {
