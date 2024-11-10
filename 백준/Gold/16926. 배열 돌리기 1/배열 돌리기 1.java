@@ -26,7 +26,6 @@ public class Main {
 		
 		int rep = Math.min(N, M) / 2; // 배열 내에서 회전해야하는 depth
 		for(int i = 0; i < R; i++) {
-			boolean[][] visited = new boolean[N][M];
 			for(int j = 0; j < rep; j++) {
 				int tmp = arr[j][j];
 				int x = j;
@@ -37,7 +36,7 @@ public class Main {
 					int nx = x + dx[dir];
 					int ny = y + dy[dir];
 					
-					if(nx < 0 || nx >= N || ny < 0 || ny >= M || visited[nx][ny]) {
+					if(nx < j || nx >= N-j || ny < j || ny >= M-j) {
 						dir = (dir+1) % 4;
 						nx = x + dx[dir];
 						ny = y + dy[dir];
@@ -49,7 +48,6 @@ public class Main {
 					}
 					
 					arr[x][y] = arr[nx][ny];
-					visited[nx][ny] = true;
 					x = nx;
 					y = ny;
 				}
