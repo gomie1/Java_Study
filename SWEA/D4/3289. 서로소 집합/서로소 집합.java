@@ -11,6 +11,7 @@ public class Solution {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
 		
+		StringBuilder sb = new StringBuilder();
 		for(int test_case = 1; test_case <= T; test_case++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			n = Integer.parseInt(st.nextToken());
@@ -22,6 +23,7 @@ public class Solution {
 			}
 			
 			res = "";
+			sb.append("#" + test_case + " ");
 			for(int i = 0; i < m; i++) {
 				st = new StringTokenizer(br.readLine());
 				int num = Integer.parseInt(st.nextToken());
@@ -30,13 +32,13 @@ public class Solution {
 				
 				if(num == 0) union(a, b);
 				else {
-					if(findSet(a) == findSet(b)) res += "1";
-					else res += "0";
+					if(findSet(a) == findSet(b)) sb.append(1);
+					else sb.append(0);
 				}
 			}
-			
-			System.out.println("#" + test_case + " " + res);
+			sb.append("\n");
 		}
+		System.out.println(sb);
 	}
 	
 	private static void union(int a, int b) {
