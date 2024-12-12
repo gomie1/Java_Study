@@ -76,14 +76,18 @@ public class Main {
         Arrays.fill(dist, INF);
         dist[start] = 0; // 시작 노드의 거리는 0
 
+        boolean[] visited = new boolean[N+1];
         PriorityQueue<Node> pq = new PriorityQueue<>();
         pq.offer(new Node(start, 0));
 
         while(!pq.isEmpty()) { 
             Node cur = pq.poll();
+            
+            if(visited[cur.num]) continue;
+            visited[cur.num] = true;
 
             for(Node next : graph[cur.num]) {
-                if(dist[next.num] > cur.dist + next.dist) {
+                if(!visited[next.num] && dist[next.num] > cur.dist + next.dist) {
                     dist[next.num] = cur.dist + next.dist;
                     pq.offer(new Node(next.num, dist[next.num]));
                 }
