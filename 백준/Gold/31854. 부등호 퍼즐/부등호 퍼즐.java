@@ -1,22 +1,23 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+    static int N;
+    static Pos[] pos;
+
     static class Pos implements Comparable<Pos> {
         int idx;
         int x;
         int y;
         int order;
+        int num;
 
         public Pos(int idx, int x, int y, int order) {
             this.idx = idx;
             this.x = x;
             this.y = y;
             this.order = order;
+            this.num = 0;
         }
 
         @Override
@@ -25,11 +26,22 @@ public class Main {
         }
     }
 
+    static void print() throws IOException {
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        for (int i = 0; i < N*N; i++) {
+            if(i != 0 && i % N == 0) bw.write("\n");
+            bw.write(pos[i].num + " ");
+        }
+        bw.write("\n");
+
+        bw.flush();
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
 
-        Pos[] pos = new Pos[N * N];
+        pos = new Pos[N * N];
         int idx = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -83,29 +95,23 @@ public class Main {
             }
         }
 
-        PriorityQueue<Pos> pq = new PriorityQueue<>();
+        Queue<Pos> q = new LinkedList<>();
         for (int i = 0; i < N*N; i++) {
-            if(pos[i].order == 0) pq.offer(pos[i]);
+            if(pos[i].order == 0) q.offer(pos[i]);
         }
 
-        int[][] res = new int[N][N];
         int value = 1;
-        while (!pq.isEmpty()) {
-            Pos cur = pq.poll();
-            res[cur.x][cur.y] = value;
+        while (!q.isEmpty()) {
+            Pos cur = q.poll();
+            cur.num = value;
             value++;
 
             for(Pos p : graph[cur.idx]) {
                 p.order--;
-                if(p.order == 0) pq.offer(p);
+                if(p.order == 0) q.offer(p);
             }
         }
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                System.out.print(res[i][j] + " ");
-            }
-            System.out.println();
-        }
+        print();
     }
 }
