@@ -4,6 +4,7 @@ import java.util.*;
 public class Main {
     static int N;
     static Pos[] pos;
+    static ArrayList<Pos>[] graph;
 
     static class Pos implements Comparable<Pos> {
         int idx;
@@ -12,11 +13,11 @@ public class Main {
         int order;
         int num;
 
-        public Pos(int idx, int x, int y, int order) {
+        public Pos(int idx, int x, int y) {
             this.idx = idx;
             this.x = x;
             this.y = y;
-            this.order = order;
+            this.order = 0;
             this.num = 0;
         }
 
@@ -45,12 +46,12 @@ public class Main {
         int idx = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                pos[idx] = new Pos(idx, i, j, 0);
+                pos[idx] = new Pos(idx, i, j);
                 idx++;
             }
         }
 
-        ArrayList<Pos>[] graph = new ArrayList[N*N];
+        graph = new ArrayList[N*N];
         for (int i = 0; i < N*N; i++) {
             graph[i] = new ArrayList<>();
         }
@@ -95,6 +96,11 @@ public class Main {
             }
         }
 
+        topologySort();
+        print();
+    }
+    
+    private static void topologySort() {
         Queue<Pos> q = new LinkedList<>();
         for (int i = 0; i < N*N; i++) {
             if(pos[i].order == 0) q.offer(pos[i]);
@@ -111,7 +117,5 @@ public class Main {
                 if(p.order == 0) q.offer(p);
             }
         }
-
-        print();
     }
 }
