@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
@@ -15,9 +14,7 @@ public class Main {
         int M = Integer.parseInt(st.nextToken()); // 건물의 쌍의 개수
 
         parents = new int[N+1];
-        for (int i = 1; i <= N; i++) {
-            parents[i] = i;
-        }
+        Arrays.fill(parents, -1);
 
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
@@ -29,22 +26,19 @@ public class Main {
 
         int ans = 0;
         st = new StringTokenizer(br.readLine());
-        int[] timeTable = new int[N];
-        for (int i = 0; i < N; i++) {
-            timeTable[i] = Integer.parseInt(st.nextToken());
-        }
-
+        int cur = Integer.parseInt(st.nextToken());
         for (int i = 0; i < N-1; i++) {
-            int s1 = findRoot(timeTable[i]);
-            int s2 = findRoot(timeTable[i+1]);
-            if(s1 != s2) ans++;
+            int nxt = Integer.parseInt(st.nextToken());
+            
+            if(findRoot(cur) != findRoot(nxt)) ans++;
+            cur = nxt;
         }
 
         System.out.println(ans);
     }
 
     private static int findRoot(int a) {
-        if(parents[a] == a) return a;
+        if(parents[a] < 0) return a;
         return parents[a] = findRoot(parents[a]);
     }
 
