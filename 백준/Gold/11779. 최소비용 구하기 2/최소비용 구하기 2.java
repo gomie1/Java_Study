@@ -66,10 +66,7 @@ public class Main {
             for (Bus nxt : info[cur.city]) {
                 if(dist[cur.city] + nxt.cost < dist[nxt.city]) {
                     dist[nxt.city] = dist[cur.city] + nxt.cost;
-                    ArrayList<Integer> p = new ArrayList<>();
-                    for (int a : cur.path) {
-                        p.add(a);
-                    }
+                    ArrayList<Integer> p = (ArrayList<Integer>) cur.path.clone();
                     p.add(nxt.city);
                     q.offer(new Bus(nxt.city, dist[nxt.city], p));
                     path[nxt.city] = p;
