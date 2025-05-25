@@ -11,12 +11,8 @@ public class Main {
         for (int i = 0; i < n; i++) {
             String order = br.readLine();
             int value = 0;
-            if (order.contains("push")) {
-                String s = "";
-                for (int j = 5; j < order.length(); j++) {
-                    s += order.charAt(j);
-                }
-                value = Integer.parseInt(s);
+            if (order.startsWith("push")) {
+                value = Integer.parseInt(order.substring(5));
                 order = "push";
             }
 
