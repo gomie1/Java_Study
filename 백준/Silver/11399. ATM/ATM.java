@@ -13,12 +13,11 @@ public class Main {
         }
 
         Arrays.sort(P);
-        int[] sum = new int[N];
-        sum[0] = P[0];
+        int tmp = P[0];
         int ans = P[0];
         for (int i = 1; i < N; i++) {
-            sum[i] = sum[i-1] + P[i];
-            ans += sum[i];
+            tmp += P[i];
+            ans += tmp;
         }
 
         System.out.println(ans);
