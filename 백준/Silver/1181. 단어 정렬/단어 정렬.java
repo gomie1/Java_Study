@@ -18,7 +18,7 @@ public class Main {
             else return a.compareTo(b);
         });
 
-        for (String str : list) sb.append(str + "\n");
+        for (String str : list) sb.append(str).append('\n');
         System.out.println(sb);
     }
 }
