@@ -6,17 +6,16 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        Set<Integer> set = new HashSet<>();
+        boolean[] visited = new boolean[2000001];
         for (int i = 0; i < N; i++) {
-            set.add(Integer.parseInt(br.readLine()));
+            visited[Integer.parseInt(br.readLine()) + 1000000] = true;
         }
 
-        List<Integer> list = new ArrayList<>(set);
-        Collections.sort(list);
-
         StringBuilder sb = new StringBuilder();
-        for (int n : list) sb.append(n).append('\n');
+        for (int i = 0; i <= 2000000; i++) {
+            if (visited[i]) sb.append(i - 1000000).append('\n');
+        }
 
-        System.out.println(sb);
+        System.out.print(sb);
     }
 }
