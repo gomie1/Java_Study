@@ -2,12 +2,11 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
     static int[] A;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         A = new int[N];
@@ -20,25 +19,24 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < M; i++) {
-            if (find(Integer.parseInt(st.nextToken()))) sb.append("1\n");
-            else sb.append("0\n");
+            sb.append(findNum(Integer.parseInt(st.nextToken()), N)).append('\n');
         }
 
-        System.out.println(sb);
+        System.out.print(sb);
     }
 
-    static boolean find(int num) {
+    static int findNum(int num, int size) {
         int left = 0;
-        int right = N-1;
+        int right = size - 1;
 
         while (left <= right) {
             int mid = (left + right) / 2;
+            if (A[mid] == num) return 1;
 
-            if (num == A[mid]) return true;
-            else if (num < A[mid]) right = mid - 1;
-            else left = mid + 1;
+            if (A[mid] < num) left = mid + 1;
+            else right = mid - 1;
         }
 
-        return false;
+        return 0;
     }
 }
