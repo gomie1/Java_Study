@@ -10,14 +10,22 @@ public class Main {
             return;
         }
 
-        for (int i = N/5; i >= 0; i--) {
-            int val = N - (i * 5);
-            if (val % 3 == 0) {
-                System.out.println((val / 3) + i);
-                return;
+        int cnt = 0;
+        while (N > 0) {
+            if (N % 5 != 0) {
+                N -= 3;
+                if (N == 1 || N == 2) {
+                    cnt = -1;
+                    break;
+                }
+                cnt++;
+            }
+            else {
+                cnt += N / 5;
+                break;
             }
         }
 
-        System.out.println(-1);
+        System.out.println(cnt);
     }
 }
