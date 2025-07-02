@@ -7,19 +7,18 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] card = new int[20000001];
+        final int OFFSET = 10_000_000;
+        int[] card = new int[OFFSET * 2 + 1];
         for (int i = 0; i < N; i++) {
             int idx = Integer.parseInt(st.nextToken());
-            if (idx < 0) idx = (idx * -1) + 10000000;
-            card[idx]++;
+            card[idx + OFFSET]++;
         }
 
         int M = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < M; i++) {
-            int idx = Integer.parseInt(st.nextToken());
-            if (idx < 0) idx = (idx * -1) + 10000000;
+            int idx = Integer.parseInt(st.nextToken()) + OFFSET;
             sb.append(card[idx]).append(" ");
         }
 
