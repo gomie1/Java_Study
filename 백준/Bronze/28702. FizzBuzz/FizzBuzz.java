@@ -13,8 +13,9 @@ public class Main {
             break;
         }
 
-        if (val % 3 == 0) System.out.println(val % 5 == 0 ? "FizzBuzz" : "Fizz");
-        else if (val % 5 == 0) System.out.println(val % 3 == 0 ? "FizzBuzz" : "Buzz");
+        if (val % 3 == 0 && val % 5 == 0) System.out.println("FizzBuzz");
+        else if (val % 3 == 0) System.out.println("Fizz");
+        else if (val % 5 == 0) System.out.println("Buzz");
         else System.out.println(val);
     }
 }
