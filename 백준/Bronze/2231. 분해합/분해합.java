@@ -6,7 +6,8 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
 
         int ans = 0;
-        for (int i = 1; i < 1000000; i++) {
+        int start = N - Integer.toString(N).length() * 9;
+        for (int i = start; i < N; i++) {
             int sum = i;
 
             String str = Integer.toString(i);
