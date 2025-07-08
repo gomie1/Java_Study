@@ -6,35 +6,41 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        List<Integer> input = new ArrayList<>();
-        Set<Integer> numSet = new HashSet<>();
-        double sum = 0;
-        int[] cnt = new int[8001];
+        int[] arr = new int[N];
+        int[] count = new int[8001];
+        int sum = 0;
+        int maxCount = 0;
         for (int i = 0; i < N; i++) {
-            int val = Integer.parseInt(br.readLine());
-            input.add(val);
-            numSet.add(val);
-            sum += val;
-            cnt[val + 4000]++;
+            arr[i] = Integer.parseInt(br.readLine());
+            sum += arr[i];
+            count[arr[i] + 4000]++;
+            
+            if (maxCount < count[arr[i] + 4000]) {
+                maxCount = count[arr[i] + 4000];
+            }
         }
-        Collections.sort(input);
+        
+        Arrays.sort(arr);
 
-        int maxCnt = 0;
-        for (int n : numSet) {
-            if (maxCnt < cnt[n + 4000]) maxCnt = cnt[n + 4000];
+        int mode = 0;
+        boolean first = true;
+        for (int i = 0; i < 8001; i++) {
+            if (count[i] == maxCount) {
+                if (first) {
+                    mode = i - 4000;
+                    first = false;
+                } else {
+                    mode = i - 4000;
+                    break;
+                }
+            }
         }
-
-        List<Integer> cntList = new ArrayList<>();
-        for (int n : numSet) {
-            if (cnt[n + 4000] == maxCnt) cntList.add(n);
-        }
-        Collections.sort(cntList);
 
         StringBuilder sb = new StringBuilder();
-        sb.append(Math.round(sum / N)).append('\n');
-        sb.append(input.get(N/2)).append('\n');
-        sb.append(cntList.size() > 1 ? cntList.get(1) : cntList.get(0)).append('\n');
-        sb.append(input.get(N-1) - input.get(0));
+        sb.append(Math.round((double) sum / N)).append('\n');
+        sb.append(arr[N/2]).append('\n');
+        sb.append(mode).append('\n');
+        sb.append(arr[N-1] - arr[0]);
         System.out.println(sb);
     }
 }
