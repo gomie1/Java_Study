@@ -18,22 +18,20 @@ public class Main {
         stack.add(num++);
         sb.append("+\n");
 
-        boolean flag = true;
         while (idx < n) {
             if (!stack.isEmpty() && stack.peek() == arr[idx]) {
                 stack.pop();
                 idx++;
                 sb.append("-\n");
             } else if (!stack.isEmpty() && stack.peek() > arr[idx]) {
-                flag = false;
-                break;
+                System.out.println("NO");
+                return;
             } else {
                 stack.add(num++);
                 sb.append("+\n");
             }
         }
 
-        if (!flag) System.out.println("NO");
-        else System.out.print(sb);
+        System.out.print(sb);
     }
 }
