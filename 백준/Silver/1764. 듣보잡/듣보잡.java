@@ -13,7 +13,7 @@ public class Main {
             name.add(br.readLine());
         }
 
-        List<String> arr = new LinkedList<>();
+        ArrayList<String> arr = new ArrayList<>();
         for (int i = 0; i < M; i++) {
             String input = br.readLine();
             if (name.contains(input)) arr.add(input);
