@@ -19,7 +19,7 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < M; i++) {
             String question = br.readLine();
-            if (question.charAt(0) - '0' >= 1 && question.charAt(0) - '0' <= 9) sb.append(monster[Integer.parseInt(question)]).append('\n');
+            if (Character.isDigit(question.charAt(0))) sb.append(monster[Integer.parseInt(question)]).append('\n');
             else sb.append(nameToIdx.get(question)).append('\n');
         }
 
