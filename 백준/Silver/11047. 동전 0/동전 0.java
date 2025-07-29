@@ -17,15 +17,9 @@ public class Main {
         for (int i = N-1; i >= 0; i--) {
             if (coin[i] > K) continue;
 
-             while (true) {
-                 K -= coin[i];
-                 if (K < 0) {
-                     K += coin[i];
-                     break;
-                 }
-
-                 ans++;
-             }
+            int cnt = K / coin[i];
+            ans += cnt;
+            K -= cnt * coin[i];
         }
 
         System.out.println(ans);
