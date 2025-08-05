@@ -12,9 +12,9 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int V = Integer.parseInt(st.nextToken());
-
+        
         graph = new ArrayList[N+1];
-        for (int i = 1; i <= N; i++) {
+        for (int i = 0; i <= N; i++) {
             graph[i] = new ArrayList<>();
         }
 
@@ -32,38 +32,43 @@ public class Main {
         }
 
         visited = new boolean[N+1];
-        DFS(V);
-        sb.append("\n");
+        visited[V] = true;
+        sb.append(V).append(' ');
+        dfs(V);
+        sb.append('\n');
 
         visited = new boolean[N+1];
-        BFS(V);
-        System.out.println(sb);
+        bfs(V);
+
+        System.out.print(sb);
     }
 
-    static void DFS(int cur) {
-        visited[cur] = true;
-        sb.append(cur).append(" ");
-
-        for (int node : graph[cur]) {
-            if (!visited[node]) DFS(node);
+    static void dfs(int cur) {
+        for (int nxt : graph[cur]) {
+            if (!visited[nxt]) {
+                visited[nxt] = true;
+                sb.append(nxt).append(' ');
+                dfs(nxt);
+            }
         }
     }
 
-    static void BFS(int start) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(start);
+    static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(start);
         visited[start] = true;
 
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
-            sb.append(cur).append(" ");
+        while (!q.isEmpty()) {
+            int cur = q.poll();
+            sb.append(cur).append(' ');
 
-            for (int node: graph[cur]) {
-                if (!visited[node]) {
-                    queue.offer(node);
-                    visited[node] = true;
+            for (int nxt : graph[cur]) {
+                if (!visited[nxt]) {
+                    visited[nxt] = true;
+                    q.offer(nxt);
                 }
             }
         }
+        sb.append('\n');
     }
 }
