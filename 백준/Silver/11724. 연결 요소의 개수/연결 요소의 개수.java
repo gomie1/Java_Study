@@ -2,14 +2,13 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
     static ArrayList<Integer>[] graph;
     static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken()); // 정점의 개수
+        int N = Integer.parseInt(st.nextToken()); // 정점의 개수
         int M = Integer.parseInt(st.nextToken()); // 간선의 개수
 
         graph = new ArrayList[N+1];
