@@ -2,60 +2,55 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N, M, B, map[][];
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        B = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        int B = Integer.parseInt(st.nextToken());
 
-        map = new int[N][M];
+        int[] cnt = new int[257];
         int min = 256;
         int max = 0;
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < M; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
+                int h = Integer.parseInt(st.nextToken());
+                cnt[h]++;
 
-                if (map[i][j] < min) min = map[i][j];
-                else if (map[i][j] > max) max = map[i][j];
+                if (h < min) min = h;
+                else if (h > max) max = h;
             }
         }
 
-        int second = Integer.MAX_VALUE;
-        int height = 0;
+        long ans_s = Long.MAX_VALUE;
+        int ans_h = 0;
         for (int h = min; h <= max; h++) {
-            int val = check(h);
-            if (val >= 0 && val <= second) {
-                second = val;
-                height = h;
-            }
-        }
+            int second = 0;
+            int block = B;
 
-        System.out.println(second + " " + height);
-    }
+            for (int x = 0; x <= 256; x++) {
+                if (cnt[x] == 0 || x == h) continue;
 
-    static int check(int height) {
-        int block = B;
-        int time = 0;
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (map[i][j] > height) {
-                    int val = map[i][j] - height;
-                    time += 2 * val;
+                int val = Math.abs(h - x) * cnt[x];
+                if (x > h) {
+                    second += 2 * val;
                     block += val;
-                } else if (map[i][j] < height) {
-                    int val = height - map[i][j];
-                    time += val;
+                }
+                else if (x < h) {
+                    second += val;
                     block -= val;
                 }
             }
+
+            if (block < 0) continue;
+
+            if (ans_s >= second && ans_h <= h) {
+                ans_s = second;
+                ans_h = h;
+            }
         }
 
-        if (block < 0) return -1;
-        else return time;
+        System.out.println(ans_s + " " + ans_h);
     }
 }
