@@ -24,7 +24,7 @@ public class Main {
         int[] dx = {-1, 1, 0, 0};
         int[] dy = {0, 0, -1, 1};
 
-        Queue<int[]> q = new LinkedList<>();
+        Queue<int[]> q = new ArrayDeque<>();
         boolean[][] visited = new boolean[N][M];
         q.offer(new int[] {x, y});
         visited[x][y] = true;
