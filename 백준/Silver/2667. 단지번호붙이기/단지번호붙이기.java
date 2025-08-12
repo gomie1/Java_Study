@@ -1,80 +1,62 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-
-    // 우 하 좌 상
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {1, 0, -1, 0};
-
-    static int N, map[][], cnt;
-    static boolean[][] visited;
-    static ArrayList<Integer> homeCnt;
-
-    static class Pos {
-        int x, y;
-
-        Pos(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine()); // 지도의 크기
+        int N = Integer.parseInt(br.readLine());
 
-        // 지도 정보 입력 받기
-        map = new int[N][N];
-        for(int i = 0; i < N; i++) {
-            String input = br.readLine();
-            for(int j = 0; j < N; j++) {
-                map[i][j] = input.charAt(j) - '0';
+        int[][] map = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            char[] input = br.readLine().toCharArray();
+            for (int j = 0; j < N; j++) {
+                map[i][j] = input[j] - '0';
             }
         }
 
-        int res = 0;
-        visited = new boolean[N][N];
-        homeCnt = new ArrayList<>();
-        for(int i = 0; i < N; i++) {
-            for(int j = 0; j < N; j++) {
-                if(!visited[i][j] && map[i][j] == 1) {
-                    cnt = 1;
-                    bfs(i, j);
-                    res++;
-                    homeCnt.add(cnt);
+        ArrayList<Integer> ans = new ArrayList<>();
+        int total = 0;
+        Queue<int[]> q = new LinkedList<>();
+        boolean[][] visited = new boolean[N][N];
+
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (!visited[i][j] && map[i][j] == 1) {
+                    q.offer(new int[] {i, j});
+                    visited[i][j] = true;
+                    int cnt = 0;
+                    total++;
+
+                    while (!q.isEmpty()) {
+                        int[] cur = q.poll();
+                        cnt++;
+
+                        for (int k = 0; k < 4; k++) {
+                            int nx = cur[0] + dx[k];
+                            int ny = cur[1] + dy[k];
+
+                            if (nx < 0 || nx >= N || ny < 0 || ny >= N ||
+                                    visited[nx][ny] || map[nx][ny] == 0) continue;
+
+                            q.offer(new int[] {nx, ny});
+                            visited[nx][ny] = true;
+                        }
+                    }
+
+                    ans.add(cnt);
                 }
             }
         }
 
-        Collections.sort(homeCnt);
-        System.out.println(res);
-        for(int home : homeCnt) {
-            System.out.println(home);
-        }
-    }
+        Collections.sort(ans);
 
-    /* 1. visited 배열을 사용하는 방법 */
-    private static void bfs(int start_x, int start_y) {
-        Queue<Pos> queue = new LinkedList<>();
-        queue.offer(new Pos(start_x, start_y));
-        visited[start_x][start_y] = true;
+        StringBuilder sb = new StringBuilder();
+        sb.append(total).append('\n');
+        for (int v : ans) sb.append(v).append('\n');
 
-        while(!queue.isEmpty()) {
-            Pos cur = queue.poll();
-
-            for(int i = 0; i < 4; i++) {
-                int nx = cur.x + dx[i];
-                int ny = cur.y + dy[i];
-
-                if(nx >= 0 && nx < N && ny >= 0 && ny < N && !visited[nx][ny] && map[nx][ny] == 1) {
-                    visited[nx][ny] = true;
-                    cnt++;
-                    queue.offer(new Pos(nx, ny));
-                }
-            }
-        }
+        System.out.print(sb);
     }
 }
