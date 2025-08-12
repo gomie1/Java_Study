@@ -1,30 +1,24 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         int M = Integer.parseInt(br.readLine());
-        String str = br.readLine();
-        
-        String Pn = "IOI";
-        for (int i = 2; i <= N; i++) {
-            Pn += "OI";
-        }
+        String s = br.readLine();
 
-        int len = Pn.length() - 1;
         int cnt = 0;
+        int ans = 0;
 
-        for (int left = 0; left < str.length() - len; left++) {
-            String cur = "";
-            int right = left + len;
-            for (int i = left; i <= right; i++) {
-                cur += str.charAt(i);
-            }
-
-            if (cur.equals(Pn)) cnt++;
+        for (int i = 1; i < M - 1; i++) {
+            if (s.charAt(i-1) == 'I' && s.charAt(i) == 'O' && s.charAt(i+1) == 'I') {
+                cnt++;
+                if (cnt >= N) ans++;
+                i++; // 'I'까지 건너뛰기
+            } else cnt = 0;
         }
 
-        System.out.println(cnt);
+        System.out.println(ans);
     }
 }
