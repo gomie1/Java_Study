@@ -23,11 +23,11 @@ public class Main {
         }
 
         Queue<int[]> q = new LinkedList<>();
-        boolean[] visited = new boolean[N+1];
         int tmp = Integer.MAX_VALUE;
         int ans = 0;
 
         for (int i = 1; i <= N; i++) {
+            boolean[] visited = new boolean[N+1];
             q.offer(new int[] {i, 0});
             visited[i] = true;
             int sum = 0;
@@ -48,8 +48,6 @@ public class Main {
                 tmp = sum;
                 ans = i;
             }
-
-            Arrays.fill(visited, false);
         }
 
         System.out.println(ans);
