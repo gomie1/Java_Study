@@ -54,9 +54,9 @@ public class Main {
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                sb.append(result[i][j]).append(" ");
+        for (int[] row : result) {
+            for (int val : row) {
+                sb.append(val).append(" ");
             }
             sb.append('\n');
         }
