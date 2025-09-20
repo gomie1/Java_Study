@@ -8,26 +8,36 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        Integer[] score = new Integer[N];
-        int val = 0;
+        int[][] infos = new int[N][4]; // [국가번호, 금, 은, 동]
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            int idx = Integer.parseInt(st.nextToken());
-            int sum = 0;
-
-            sum += Integer.parseInt(st.nextToken()) * 5;
-            sum += Integer.parseInt(st.nextToken()) * 3;
-            sum += Integer.parseInt(st.nextToken());
-
-            score[idx-1] = sum;
-            if (idx == K) val = sum;
+            int num = Integer.parseInt(st.nextToken());
+            infos[i] = new int[] {
+                num,
+                Integer.parseInt(st.nextToken()),
+                Integer.parseInt(st.nextToken()),
+                Integer.parseInt(st.nextToken())
+            };
         }
 
-        Arrays.sort(score, Collections.reverseOrder());
-        for (int i = 0; i <= N; i++) {
-            if (val == score[i]) {
-                System.out.println(i+1);
-                return;
+        // 금 -> 은 -> 동 내림차순 정렬
+        Arrays.sort(infos, (a, b) -> {
+            if (a[1] != b[1]) return b[1] - a[1];
+            if (a[2] != b[2]) return b[2] - a[2];
+            return b[3] - a[3];
+        });
+
+        int rank = 1;
+        for (int i = 0; i < N; i++) {
+            if (i > 0) {
+                if (infos[i-1][1] != infos[i][1] ||
+                    infos[i-1][2] != infos[i][2] ||
+                    infos[i-1][3] != infos[i][3]) rank = i + 1;
+            }
+
+            if (infos[i][0] == K) {
+                System.out.println(rank);
+                break;
             }
         }
     }
