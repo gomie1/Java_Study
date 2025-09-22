@@ -26,13 +26,9 @@ public class Main {
                 int start = number;
                 int end = number;
 
-                while (true) {
-                    if (start == 1 || end == n) break;
-
-                    if (light[start - 1] == light[end + 1]) {
-                        start -= 1;
-                        end += 1;
-                    } else break;
+                while (start > 1 && end < n && light[start - 1] == light[end + 1]) {
+                    start -= 1;
+                    end += 1;
                 }
 
                 for (int j = start; j <= end; j++) {
