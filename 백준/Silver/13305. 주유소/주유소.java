@@ -18,12 +18,12 @@ public class Main {
             price[i] = Integer.parseInt(st.nextToken());
         }
 
-        int ans = 0; // 총 비용
+        long ans = 0; // 총 비용
         int sumDist = 0; // 누적 거리
         int cur = 0; // 현재 도시의 인덱스
         while (cur < N-1) {
             if (price[cur] > price[cur+1]) {
-                ans += price[cur] * dist[cur];
+                ans += (long) price[cur] * dist[cur];
                 cur++;
             } else {
                 int cnt = 0; // 주유를 건너뛸 도시의 개수
@@ -32,7 +32,7 @@ public class Main {
                     sumDist += dist[i];
                     cnt++;
                 }
-                ans += price[cur] * sumDist;
+                ans += (long) price[cur] * sumDist;
                 cur += cnt;
                 sumDist = 0;
             }
