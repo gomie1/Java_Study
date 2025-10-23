@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Main {
     static ArrayList<Integer>[] graph;
-    static boolean[] visited;
-    static StringBuilder sb = new StringBuilder();
+    static boolean[] visited1;
+    static StringBuilder sb;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,9 +12,9 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int V = Integer.parseInt(st.nextToken());
-        
+
         graph = new ArrayList[N+1];
-        for (int i = 0; i <= N; i++) {
+        for (int i = 1; i <= N; i++) {
             graph[i] = new ArrayList<>();
         }
 
@@ -31,44 +31,41 @@ public class Main {
             Collections.sort(graph[i]);
         }
 
-        visited = new boolean[N+1];
-        visited[V] = true;
-        sb.append(V).append(' ');
-        dfs(V);
+        sb = new StringBuilder();
+        visited1 = new boolean[N+1];
+        visited1[V] = true;
+        DFS(V);
         sb.append('\n');
+        BFS(N, V);
 
-        visited = new boolean[N+1];
-        bfs(V);
-
-        System.out.print(sb);
+        System.out.println(sb);
     }
 
-    static void dfs(int cur) {
+    static void DFS(int cur) {
+        sb.append(cur).append(" ");
+
         for (int nxt : graph[cur]) {
-            if (!visited[nxt]) {
-                visited[nxt] = true;
-                sb.append(nxt).append(' ');
-                dfs(nxt);
-            }
+            if (visited1[nxt]) continue;
+            visited1[nxt] = true;
+            DFS(nxt);
         }
     }
 
-    static void bfs(int start) {
+    static void BFS(int N, int V) {
         Queue<Integer> q = new LinkedList<>();
-        q.offer(start);
-        visited[start] = true;
+        boolean[] visited2 = new boolean[N+1];
+        q.offer(V);
+        visited2[V] = true;
 
         while (!q.isEmpty()) {
             int cur = q.poll();
-            sb.append(cur).append(' ');
+            sb.append(cur).append(" ");
 
             for (int nxt : graph[cur]) {
-                if (!visited[nxt]) {
-                    visited[nxt] = true;
-                    q.offer(nxt);
-                }
+                if (visited2[nxt]) continue;
+                q.offer(nxt);
+                visited2[nxt] = true;
             }
         }
-        sb.append('\n');
     }
 }
