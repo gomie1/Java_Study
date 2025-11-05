@@ -1,36 +1,33 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static int N, S, ans;
-    static int[] arr;
+    static int arr[], ans;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        S = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int S = Integer.parseInt(st.nextToken());
 
-        arr = new int[N];
         st = new StringTokenizer(br.readLine());
+        arr = new int[N];
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
         ans = 0;
-        subset(0, 0);
-        
-        if (S == 0) ans--;
-        System.out.println(ans);
+        subset(0, 0, N, S);
+        System.out.println(S == 0 ? ans-1 : ans);
     }
 
-    static void subset(int num, int index) {
-        if (index == N) {
-            if (num == S) ans++;
+    static void subset(int sum, int cnt, int n, int s) {
+        if (cnt == n) {
+            if (sum == s) ans++;
             return;
         }
 
-        subset(num + arr[index], index + 1);
-        subset(num, index + 1);
+        subset(sum+arr[cnt], cnt+1, n, s);
+        subset(sum, cnt+1, n, s);
     }
 }
