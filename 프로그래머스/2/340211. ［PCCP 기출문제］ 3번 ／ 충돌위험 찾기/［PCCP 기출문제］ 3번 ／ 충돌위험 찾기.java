@@ -14,21 +14,15 @@ class Solution {
             for (int j = 1; j < routes[i].length; j++) {
                 int[] start = points[routes[i][j-1] - 1];
                 int[] end = points[routes[i][j] - 1];
-                //System.out.println("start = " + start[0] + " " + start[1] + ", end = " + end[0] + " " + end[1]);
 
                 ArrayList<String> pos = findAllPath(start[0], start[1], end[0], end[1]);
                 for (int k = 0; k < pos.size(); k++) {
+                    // 만약 2 -> 3 -> 4의 경로라면 2, 3에서는 중복 방지를 위해 마지막 위치를 넣지 않음
+                    // 그렇지 않으면 2 -> 3에서 3이 들어가고, 다음 3 -> 4에서 3이 또 들어감
                     if (j < routes[i].length - 1 && k == pos.size() - 1) continue;
                     path[i].add(pos.get(k));
                 }
-                
-                // for (int a = 0; a < path[i].size(); a++) {
-                //     System.out.print("(" + path[i].get(a) + ") ");
-                // }
-                // System.out.println();
             }
-            
-            
         }
         
         // 2. 모든 로봇이 운송을 마칠때까지 반복하며 위험 상황 체크
