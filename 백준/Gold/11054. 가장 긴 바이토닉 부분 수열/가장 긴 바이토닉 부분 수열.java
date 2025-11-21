@@ -22,7 +22,7 @@ public class Main {
 
         int[] decrease = new int[N];
         for (int i = N-1; i >= 0; i--) {
-            decrease[i] = 0;
+            decrease[i] = 1;
             for (int j = N-1; j > i; j--) {
                 if (A[j] < A[i]) decrease[i] = Math.max(decrease[i], decrease[j] + 1);
             }
@@ -30,7 +30,7 @@ public class Main {
 
         int max = 0;
         for (int i = 0; i < N; i++) {
-            max = Math.max(max, increase[i] + decrease[i]);
+            max = Math.max(max, increase[i] + decrease[i] - 1);
         }
 
         System.out.println(max);
