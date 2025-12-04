@@ -4,40 +4,23 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
 
-        Stack<Integer> stack = new Stack<>();
+        Stack<String> stack = new Stack<>();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            String order = br.readLine();
-            int value = 0;
-            if (order.startsWith("push")) {
-                value = Integer.parseInt(order.substring(5));
-                order = "push";
-            }
-
-            switch (order) {
-                case "push":
-                    stack.push(value);
-                    break;
-                case "top":
-                    if (stack.isEmpty()) sb.append(-1);
-                    else sb.append(stack.get(stack.size() - 1));
-                    sb.append("\n");
-                    break;
-                case "size":
-                    sb.append(stack.size()).append("\n");
-                    break;
-                case "empty":
-                    if (stack.isEmpty()) sb.append(1);
-                    else sb.append(0);
-                    sb.append("\n");
-                    break;
-                case "pop":
-                    if (stack.isEmpty()) sb.append(-1);
-                    else sb.append(stack.pop());
-                    sb.append("\n");
-                    break;
+        for (int i = 0; i < N; i++) {
+            String[] cmd = br.readLine().split(" ");
+            if (cmd[0].equals("push")) stack.push(cmd[1]);
+            else if (cmd[0].equals("pop")) {
+                if (stack.isEmpty()) sb.append(-1).append('\n');
+                else sb.append(stack.pop()).append('\n');
+            } else if (cmd[0].equals("size")) sb.append(stack.size()).append('\n');
+            else if (cmd[0].equals("empty")) {
+                if (stack.isEmpty()) sb.append(1).append('\n');
+                else sb.append(0).append('\n');
+            } else {
+                if (stack.isEmpty()) sb.append(-1).append('\n');
+                else sb.append(stack.peek()).append('\n');
             }
         }
 
