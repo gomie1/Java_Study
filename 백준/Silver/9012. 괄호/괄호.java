@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -8,13 +9,13 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < T; i++) {
             String input = br.readLine();
-            int cnt = 0;
+            Stack<Character> stack = new Stack<>();
             boolean flag = true;
 
             for (char c : input.toCharArray()) {
-                if (c == '(') cnt++;
+                if (c == '(') stack.push(c);
                 else {
-                    if (cnt > 0) cnt--;
+                    if (!stack.isEmpty()) stack.pop();
                     else {
                         sb.append("NO").append('\n');
                         flag = false;
@@ -24,7 +25,7 @@ public class Main {
             }
 
             if (flag) {
-                if (cnt == 0) sb.append("YES").append('\n');
+                if (stack.isEmpty()) sb.append("YES").append('\n');
                 else sb.append("NO").append('\n');
             }
         }
