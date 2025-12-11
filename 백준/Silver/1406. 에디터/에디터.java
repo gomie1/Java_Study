@@ -14,11 +14,11 @@ public class Main {
         }
 
         for (int i = 0; i < n; i++) {
-            String[] cmd = br.readLine().split(" ");
-            if (cmd[0].equals("L") && !left.isEmpty()) right.add(left.pop());
-            else if (cmd[0].equals("D") && !right.isEmpty()) left.add(right.pop());
-            else if (cmd[0].equals("B") && !left.isEmpty()) left.pop();
-            else if (cmd[0].equals("P")) left.add(cmd[1].charAt(0));
+            String cmd = br.readLine();
+            if (cmd.charAt(0) == 'L' && !left.isEmpty()) right.add(left.pop());
+            else if (cmd.charAt(0) == 'D' && !right.isEmpty()) left.add(right.pop());
+            else if (cmd.charAt(0) == 'B' && !left.isEmpty()) left.pop();
+            else if (cmd.charAt(0) == 'P') left.add(cmd.charAt(2));
         }
 
         StringBuilder sb = new StringBuilder();
