@@ -11,18 +11,11 @@ public class Main {
         }
 
         StringBuilder sb = new StringBuilder();
-        StringBuilder tmp = new StringBuilder();
+        String[] binary = {"000", "001", "010", "011", "100", "101", "110", "111"};
         for (int i = 0; i < octal.length(); i++) {
-            int n = octal.charAt(i) - '0';
-            for (int j = 0; j < 3; j++) {
-                if (n == 0) tmp.append(0);
-                else tmp.append(n % 2);
-                n /= 2;
-            }
-            
-            if (i == 0) sb.append(Integer.parseInt(tmp.reverse().toString()));
-            else sb.append(tmp.reverse());
-            tmp = new StringBuilder();
+            int idx = octal.charAt(i) - '0';
+            if (i == 0) sb.append(Integer.parseInt(binary[idx]));
+            else sb.append(binary[idx]);
         }
 
         System.out.println(sb);
