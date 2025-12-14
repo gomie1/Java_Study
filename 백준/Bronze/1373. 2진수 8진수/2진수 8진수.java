@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -22,12 +23,12 @@ public class Main {
         }
 
         sb = new StringBuilder();
+        int[] weight = {4, 2, 1};
         for (int i = 0; i < binary.length(); i += 3) {
             int octal = 0;
-            int weight = 2;
 
             for (int j = 0; j < 3; j++) {
-                octal += (binary.charAt(i + j) - '0') * Math.pow(2, weight--);
+                octal += (binary.charAt(i + j) - '0') * weight[j];
             }
             sb.append(octal);
         }
