@@ -3,7 +3,6 @@ import java.util.*;
 
 public class Main {
     static int N, arr[];
-    static ArrayList<Integer>[] graph;
     static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
