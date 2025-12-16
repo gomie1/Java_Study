@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Main {
     static int N, arr[];
-    static boolean[] visited, checked;
-    static String cycle;
+    static ArrayList<Integer>[] graph;
+    static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,16 +21,12 @@ public class Main {
                 arr[i] = Integer.parseInt(st.nextToken());
             }
 
-            checked = new boolean[N+1];
+            visited = new boolean[N+1];
             int cnt = 0;
             for (int i = 1; i <= N; i++) {
-                if (!checked[i]) {
-                    if (bfs(i)) {
-                        for (int j = 1; j <= N; j++) {
-                            if (visited[j]) checked[j] = true;
-                        }
-                        cnt++;
-                    }
+                if (!visited[i]) {
+                    dfs(i);
+                    cnt++;
                 }
             }
 
@@ -40,24 +36,10 @@ public class Main {
         System.out.println(sb);
     }
 
-    static boolean bfs(int start) {
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(start);
+    static void dfs(int cur) {
+        if (visited[cur]) return;
 
-        visited = new boolean[N+1];
-        visited[start] = true;
-
-        while (!q.isEmpty()) {
-            int cur = q.poll();
-            int nxt = arr[cur];
-            if (nxt == start) return true;
-
-            if (!visited[nxt]) {
-                visited[nxt] = true;
-                q.offer(nxt);
-            }
-        }
-
-        return false;
+        visited[cur] = true;
+        dfs(arr[cur]);
     }
 }
