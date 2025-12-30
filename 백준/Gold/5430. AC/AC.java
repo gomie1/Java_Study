@@ -9,45 +9,40 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         for (int tc = 0; tc < T; tc++) {
             String p = br.readLine();
-
             int n = Integer.parseInt(br.readLine());
-            Deque<String> dq = new ArrayDeque<>(n); // 초기 용량을 n개로 미리 설정
-            String str = br.readLine();
-            if (n > 0) {
-                String[] parts = str.substring(1, str.length()-1).split(",");
-                for (String s : parts) dq.offer(s);
+            String cmd = br.readLine();
+            Deque<String> dq = new ArrayDeque<>();
+
+            if (cmd.length() > 2) {
+                String[] arr = cmd.substring(1, cmd.length()-1).split(",");
+                for (String s : arr) {
+                    dq.offer(s);
+                }
             }
 
-            boolean isChange = false;
-            boolean isError = false;
+            boolean error = false;
+            boolean left = true; // true: pollFirst, false: pollLast
             for (char c : p.toCharArray()) {
-                if (c == 'R') isChange = !isChange;
-                else {
-                    if (dq.isEmpty()) {
-                        sb.append("error\n");
-                        isError = true;
-                        break;
-                    }
+                if (c == 'D' && dq.isEmpty()) {
+                    error = true;
+                    break;
+                }
 
-                    if (!isChange) dq.poll();
+                if (c == 'R') left = !left;
+                else {
+                    if (left) dq.poll();
                     else dq.pollLast();
                 }
             }
 
-            if (!isError) {
+            if (error) sb.append("error\n");
+            else {
                 sb.append('[');
-
-                if (!dq.isEmpty()) {
-                    Iterator<String> it;
-                    if (!isChange) it = dq.iterator();
-                    else it = dq.descendingIterator();
-
-                    while (it.hasNext()) {
-                        sb.append(it.next());
-                        if (it.hasNext()) sb.append(',');
-                    }
+                while (!dq.isEmpty()) {
+                    if (left) sb.append(dq.poll()).append(',');
+                    else sb.append(dq.pollLast()).append(',');
                 }
-
+                if (sb.charAt(sb.length() - 1) != '[') sb.deleteCharAt(sb.length() - 1);
                 sb.append("]\n");
             }
         }
