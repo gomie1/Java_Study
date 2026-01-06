@@ -2,9 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
-    static int M, N, map[][];
+    static int N, M, map[][];
     static boolean[][] visited;
 
     public static void main(String[] args) throws IOException {
@@ -22,32 +20,33 @@ public class Main {
             map = new int[M][N];
             for (int i = 0; i < K; i++) {
                 st = new StringTokenizer(br.readLine());
-                int x = Integer.parseInt(st.nextToken());
-                int y = Integer.parseInt(st.nextToken());
-                map[x][y] = 1;
+                map[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())] = 1;
             }
 
-            int cnt = 0;
             visited = new boolean[M][N];
+            int ans = 0;
             for (int i = 0; i < M; i++) {
                 for (int j = 0; j < N; j++) {
                     if (map[i][j] == 1 && !visited[i][j]) {
-                        cnt++;
                         bfs(i, j);
+                        ans++;
                     }
                 }
             }
 
-            sb.append(cnt).append('\n');
+            sb.append(ans).append('\n');
         }
 
-        System.out.print(sb);
+        System.out.println(sb);
     }
 
-    static void bfs(int start_x, int start_y) {
+    static void bfs(int sx, int sy) {
         Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[] {start_x, start_y});
-        visited[start_x][start_y] = true;
+        q.add(new int[] {sx, sy});
+        visited[sx][sy] = true;
+
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
 
         while (!q.isEmpty()) {
             int[] cur = q.poll();
@@ -56,8 +55,7 @@ public class Main {
                 int nx = cur[0] + dx[i];
                 int ny = cur[1] + dy[i];
 
-                if (nx < 0 || nx >= M || ny < 0 || ny >= N ||
-                        visited[nx][ny] || map[nx][ny] == 0) continue;
+                if (nx < 0 || nx >= M || ny < 0 || ny >= N || visited[nx][ny] || map[nx][ny] == 0) continue;
 
                 q.offer(new int[] {nx, ny});
                 visited[nx][ny] = true;
