@@ -1,35 +1,38 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static boolean[] visited;
-    static int n, m;
+    static int N, M, arr[];
+    static boolean[] isSelected;
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        visited = new boolean[n+1];
-        permutation("", 0);
-
+        isSelected = new boolean[N+1];
+        arr = new int[M];
+        permutation(0);
         System.out.println(sb);
     }
 
-    static void permutation(String ans, int depth) {
-        if (depth == m) {
-            sb.append(ans);
-            sb.append("\n");
+    static void permutation(int cnt) {
+        if (cnt == M) {
+            for (int i = 0; i < M; i++) {
+                sb.append(arr[i]).append(" ");
+            }
+            sb.append('\n');
             return;
         }
 
-        for (int i = 1; i <= n; i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                permutation(ans + Integer.toString(i) + " ", depth + 1);
-                visited[i] = false;
+        for (int i = 1; i <= N; i++) {
+            if (!isSelected[i]) {
+                arr[cnt] = i;
+                isSelected[i] = true;
+                permutation(cnt+1);
+                isSelected[i] = false;
             }
         }
     }
