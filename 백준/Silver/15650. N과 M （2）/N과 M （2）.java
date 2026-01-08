@@ -1,34 +1,33 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    private static int N, M, isSelected[];
-    
+    static int N, M, numbers[];
+    static StringBuilder sb = new StringBuilder();
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        
-        isSelected = new int[M];
-        combination(0, 1);
-    }
-    
-    private static void combination(int idx, int start) {
-        if(idx == M) {
-            for (int i = 0; i < M; i++) {
-                System.out.print(isSelected[i] + " ");
-            }
-            System.out.println();
 
+        numbers = new int[M];
+        combination(0, 1);
+        System.out.println(sb);
+    }
+
+    static void combination(int cnt, int start) {
+        if (cnt == M) {
+            for (int i = 0; i < M; i++) {
+                sb.append(numbers[i]).append(" ");
+            }
+            sb.append('\n');
             return;
         }
 
         for (int i = start; i <= N; i++) {
-            isSelected[idx] = i;
-            combination(idx+1, i+1);
+            numbers[cnt] = i;
+            combination(cnt+1, i+1);
         }
     }
 }
