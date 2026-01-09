@@ -12,14 +12,14 @@ public class Main {
             numbers[i] = Integer.parseInt(st.nextToken());
         }
 
-        Stack<Integer> stack = new Stack<>();
+        Deque<Integer> stack = new ArrayDeque<>();
         int[] ans = new int[N];
         for (int i = N-1; i >= 0; i--) {
-            while (!stack.isEmpty() && stack.peek() <= numbers[i]) stack.pop();
+            while (!stack.isEmpty() && stack.peekFirst() <= numbers[i]) stack.pollFirst();
 
             if (stack.isEmpty()) ans[i] = -1;
-            else ans[i] = stack.peek();
-            stack.add(numbers[i]);
+            else ans[i] = stack.peekFirst();
+            stack.addFirst(numbers[i]);
         }
 
         StringBuilder sb = new StringBuilder();
