@@ -27,6 +27,7 @@ public class Main {
             }
         }
 
+        map[x][y] = 0;
         System.out.println(babyShark(x, y));
     }
 
@@ -51,8 +52,7 @@ public class Main {
             time += fish[2];
 
             // 3. 물고기 잡아먹기
-            map[cur[0]][cur[1]] = 0;
-            map[fish[0]][fish[1]] = 9;
+            map[fish[0]][fish[1]] = 0;
             cnt++;
 
             // 4. 아기 상어가 자신의 크기만큼 물고기를 잡아먹었다면 크기 1증가
