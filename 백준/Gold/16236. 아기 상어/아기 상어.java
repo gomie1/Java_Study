@@ -3,7 +3,6 @@ import java.util.*;
 
 public class Main {
     static int N, map[][], shark;
-    static ArrayList<int[]> fishPos = new ArrayList<>();
 
     static int[] dx = {-1, 1, 0, 0};
     static int[] dy = {0, 0, -1, 1};
@@ -25,9 +24,6 @@ public class Main {
                     x = i;
                     y = j;
                 }
-
-                // 물고기의 위치
-                if (map[i][j] >= 1 && map[i][j] <= 6) fishPos.add(new int[] {i, j});
             }
         }
 
