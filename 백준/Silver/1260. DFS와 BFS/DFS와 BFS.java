@@ -2,14 +2,15 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static int N;
     static ArrayList<Integer>[] graph;
-    static boolean[] visited1;
-    static StringBuilder sb;
+    static boolean[] visited;
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int V = Integer.parseInt(st.nextToken());
 
@@ -17,54 +18,51 @@ public class Main {
         for (int i = 1; i <= N; i++) {
             graph[i] = new ArrayList<>();
         }
-
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
 
-            graph[a].add(b);
-            graph[b].add(a);
+            graph[from].add(to);
+            graph[to].add(from);
         }
 
         for (int i = 1; i <= N; i++) {
             Collections.sort(graph[i]);
         }
 
-        sb = new StringBuilder();
-        visited1 = new boolean[N+1];
-        visited1[V] = true;
-        DFS(V);
+        visited = new boolean[N+1];
+        dfs(V);
         sb.append('\n');
-        BFS(N, V);
 
+        visited = new boolean[N+1];
+        bfs(V);
         System.out.println(sb);
     }
 
-    static void DFS(int cur) {
+    static void dfs(int cur) {
+        visited[cur] = true;
         sb.append(cur).append(" ");
 
         for (int nxt : graph[cur]) {
-            if (visited1[nxt]) continue;
-            visited1[nxt] = true;
-            DFS(nxt);
+            if (!visited[nxt]) dfs(nxt);
         }
     }
 
-    static void BFS(int N, int V) {
+    static void bfs(int start) {
         Queue<Integer> q = new LinkedList<>();
-        boolean[] visited2 = new boolean[N+1];
-        q.offer(V);
-        visited2[V] = true;
+        q.offer(start);
+        visited[start] = true;
 
         while (!q.isEmpty()) {
             int cur = q.poll();
             sb.append(cur).append(" ");
 
             for (int nxt : graph[cur]) {
-                if (visited2[nxt]) continue;
-                q.offer(nxt);
-                visited2[nxt] = true;
+                if (!visited[nxt]) {
+                    visited[nxt] = true;
+                    q.offer(nxt);
+                }
             }
         }
     }
