@@ -1,87 +1,47 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N;
-    static int[] time;
-    static int[] preCnt;
-    static int[] res;
-    static ArrayList<Integer>[] graph;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine()); // 건물 종류의 수
-        time = new int[N+1]; // 각 건물을 짓는데 걸리는 시간을 담아줄 배열
-        preCnt = new int[N+1]; // 각 건물 별 먼저 지어야 할 건물의 수
+        int N = Integer.parseInt(br.readLine());
 
-        graph = new ArrayList[N+1];
+        ArrayList<Integer>[] buildings = new ArrayList[N+1];
         for (int i = 1; i <= N; i++) {
-            graph[i] = new ArrayList<>();
+            buildings[i] = new ArrayList<>();
         }
-
-        StringTokenizer st;
-        int idx = 1;
-        for(int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            int flag = 0;
-
-            while (true) {
-                int value = Integer.parseInt(st.nextToken());
-                if (value == -1) break;
-
-                if (flag == 0) {
-                    time[idx] = value;
-                } else {
-                    graph[value].add(idx);
-                    preCnt[idx]++;
-                }
-
-                flag++;
-            }
-            idx++;
-        }
-
-        res = new int[N+1];
-        Build();
-
+        int[] time = new int[N+1];
+        int[] degree = new int[N+1];
         for (int i = 1; i <= N; i++) {
-            System.out.println(res[i]);
-        }
-    }
-
-    // time = {0, 10, 20, 14, 4, 3}
-    // preCnt = {0, 0, 1, 1, 2, 1}
-    private static void Build() {
-        Queue<Integer> q = new LinkedList<>();
-
-        // 큐에 먼저 지어져야하는 건물이 없는 건물만 삽입
-        for (int i = 1; i <= N; i++) {
-            if(preCnt[i] == 0) {
-                q.offer(i); // {1, 10}
-                res[i] = time[i];
+            String[] input = br.readLine().split(" ");
+            time[i] = Integer.parseInt(input[0]);
+            for (int j = 1; j < input.length - 1; j++) {
+                buildings[Integer.parseInt(input[j])].add(i);
+                degree[i]++;
             }
         }
 
-        while(!q.isEmpty()) {
-            int cur = q.poll();
+        ArrayDeque<int[]> dq = new ArrayDeque<>();
+        for (int i = 1; i <= N; i++) {
+            if (degree[i] == 0) dq.offer(new int[] {i, time[i]});
+        }
 
-            for(int b : graph[cur]) {
-                res[b] = Math.max(res[b], res[cur] + time[b]);
-                preCnt[b]--;
-                if(preCnt[b] == 0) q.offer(b);
+        int[] ans = new int[N+1];
+        int[] maxTime = new int[N+1];
+        while (!dq.isEmpty()) {
+            int[] cur = dq.poll();
+            ans[cur[0]] = cur[1];
+
+            for (int nxt : buildings[cur[0]]) {
+                maxTime[nxt] = Math.max(maxTime[nxt], cur[1]);
+                if (--degree[nxt] == 0) dq.offer(new int[] {nxt, maxTime[nxt]+time[nxt]});
             }
         }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
+            sb.append(ans[i]).append('\n');
+        }
+        System.out.println(sb);
     }
 }
-
-// graph = [[],
-//          [2, 3, 4],
-//          [],
-//          [4, 5],
-//          [],
-//          []]
