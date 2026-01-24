@@ -6,32 +6,32 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        long M = Integer.parseInt(st.nextToken());
 
-        st = new StringTokenizer(br.readLine());
-        int[] tree = new int[N];
+        int[] height = new int[N];
         int max = 0;
+        st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            tree[i] = Integer.parseInt(st.nextToken());
-            if (max < tree[i]) max = tree[i];
+            height[i] = Integer.parseInt(st.nextToken());
+            if (max < height[i]) max = height[i];
         }
 
-        int start = 0;
-        int end = max;
+        int low = 0; // 절단기의 최소 높이
+        int high = max; // 절단기의 최대 높이
         int ans = 0;
-        while (start <= end) {
-            int mid = (start + end) / 2;
+        while (low <= high) {
+            int mid = (low + high) / 2; // 절단기 높이
 
-            long height = 0;
-            for (int h : tree) {
-                if (h > mid) height += h - mid;
+            long sum = 0;
+            for (int i = 0; i < N; i++) {
+                if (height[i] < mid) continue;
+                sum += height[i] - mid;
             }
 
-            if (height >= M) {
+            if (sum < M) high = mid - 1;
+            else {
                 ans = mid;
-                start = mid + 1;
-            } else {
-                end = mid -1;
+                low = mid + 1;
             }
         }
 
