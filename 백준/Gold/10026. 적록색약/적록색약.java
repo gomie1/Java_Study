@@ -3,72 +3,72 @@ import java.util.*;
 
 public class Main {
     static int N;
-    static char[][] mtrxA, mtrxB;
-    static boolean[][] visitedA, visitedB;
+    static char[][] grid;
+    static boolean[][] visited;
+
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
 
-        mtrxA = new char[N][];
+        grid = new char[N][N];
         for (int i = 0; i < N; i++) {
-            mtrxA[i] = br.readLine().toCharArray();
+            grid[i] = br.readLine().toCharArray();
         }
 
-        mtrxB = new char[N][N];
+        // 1. 적록색약이 아닌 경우
+        visited = new boolean[N][N];
+        int cnt = 0;
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (mtrxA[i][j] == 'G') mtrxB[i][j] = 'R';
-                else mtrxB[i][j] = mtrxA[i][j];
-            }
-        }
-
-        int[] ans = new int[2];
-        visitedA = new boolean[N][N];
-        visitedB = new boolean[N][N];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (!visitedA[i][j]) {
-                    bfs(true, i, j, mtrxA[i][j]);
-                    ans[0]++;
-                }
-
-                if (!visitedB[i][j]) {
-                    bfs(false, i, j, mtrxB[i][j]);
-                    ans[1]++;
+                if (!visited[i][j]) {
+                    bfs(i, j, grid[i][j]);
+                    cnt++;
                 }
             }
         }
+        sb.append(cnt).append(" ");
 
-        System.out.println(ans[0] + " " + ans[1]);
+        // 2. 적록색약인 경우
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (grid[i][j] == 'R') grid[i][j] = 'G';
+            }
+        }
+
+        visited = new boolean[N][N];
+        cnt = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (!visited[i][j]) {
+                    bfs(i, j, grid[i][j]);
+                    cnt++;
+                }
+            }
+        }
+        sb.append(cnt);
+        System.out.println(sb);
     }
 
-    static void bfs(boolean flag, int start_x, int start_y, char color) {
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
+    static void bfs(int sx, int sy, char color) {
+        ArrayDeque<int[]> dq = new ArrayDeque<>();
+        dq.offer(new int[] {sx, sy});
+        visited[sx][sy] = true;
 
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[] {start_x, start_y});
-        if (flag) visitedA[start_x][start_y] = true;
-        else visitedB[start_x][start_y] = true;
-
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
+        while (!dq.isEmpty()) {
+            int[] cur = dq.poll();
 
             for (int i = 0; i < 4; i++) {
                 int nx = cur[0] + dx[i];
                 int ny = cur[1] + dy[i];
 
-                if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
-                if (flag) {
-                    if (visitedA[nx][ny] || mtrxA[nx][ny] != color) continue;
-                    visitedA[nx][ny] = true;
-                    q.offer(new int[] {nx, ny});
-                } else {
-                    if (visitedB[nx][ny] || mtrxB[nx][ny] != color) continue;
-                    visitedB[nx][ny] = true;
-                    q.offer(new int[] {nx, ny});
-                }
+                if (nx < 0 || nx >= N || ny < 0 || ny >= N || visited[nx][ny] || grid[nx][ny] != color) continue;
+
+                visited[nx][ny] = true;
+                dq.offer(new int[] {nx, ny});
             }
         }
     }
