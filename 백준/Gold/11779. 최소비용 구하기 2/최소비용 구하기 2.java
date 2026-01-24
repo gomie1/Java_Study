@@ -1,84 +1,66 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static class Bus implements Comparable<Bus> {
-        int city;
-        int cost;
-        ArrayList<Integer> path;
-
-        public Bus(int city, int cost, ArrayList<Integer> path) {
-            this.city = city;
-            this.cost = cost;
-            this.path = path;
-        }
-
-        @Override
-        public int compareTo(Bus o) {
-            return this.cost - o.cost;
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine()); // 도시의 개수
-        int m = Integer.parseInt(br.readLine()); // 버스의 개수
+        int n = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
 
         StringTokenizer st;
-        ArrayList<Bus>[] info = new ArrayList[n+1];
+        ArrayList<int[]>[] bus = new ArrayList[n+1];
         for (int i = 1; i <= n; i++) {
-            info[i] = new ArrayList<>();
+            bus[i] = new ArrayList<>();
         }
-
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            int from = Integer.parseInt(st.nextToken());
+            int cost = Integer.parseInt(st.nextToken());
 
-            info[s].add(new Bus(e, c, new ArrayList<>()));
+            bus[to].add(new int[] {from, cost});
         }
 
         st = new StringTokenizer(br.readLine());
-        int start = Integer.parseInt(st.nextToken()); // 1
-        int end = Integer.parseInt(st.nextToken()); // 5
+        int start = Integer.parseInt(st.nextToken());
+        int end = Integer.parseInt(st.nextToken());
 
-        int[] dist = new int[n+1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        dist[start] = 0;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> {
+            return o1[1] - o2[1];
+        });
+        pq.offer(new int[] {start, 0});
 
-        PriorityQueue<Bus> q = new PriorityQueue<>();
-        ArrayList<Integer> sp = new ArrayList<>();
-        sp.add(start);
-        q.offer(new Bus(start, 0, sp));
+        int[] costs = new int[n+1];
+        Arrays.fill(costs, Integer.MAX_VALUE);
+        costs[start] = 0;
 
-        ArrayList<Integer>[] path = new ArrayList[n+1];
-        for (int i = 1; i <= n; i++) {
-            path[i] = new ArrayList<>();
-        }
+        int[] parent = new int[n+1];
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
+            if (cur[1] > costs[cur[0]]) continue;
 
-        while(!q.isEmpty()) {
-            Bus cur = q.poll();
-            if(dist[cur.city] < cur.cost) continue;
-
-            for (Bus nxt : info[cur.city]) {
-                if(dist[cur.city] + nxt.cost < dist[nxt.city]) {
-                    dist[nxt.city] = dist[cur.city] + nxt.cost;
-                    ArrayList<Integer> p = (ArrayList<Integer>) cur.path.clone();
-                    p.add(nxt.city);
-                    q.offer(new Bus(nxt.city, dist[nxt.city], p));
-                    path[nxt.city] = p;
+            for (int[] nxt : bus[cur[0]]) {
+                if (nxt[1] + cur[1] < costs[nxt[0]]) {
+                    costs[nxt[0]] = nxt[1] + cur[1];
+                    parent[nxt[0]] = cur[0];
+                    pq.offer(new int[] {nxt[0], costs[nxt[0]]});
                 }
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append(dist[end]).append("\n");
-        sb.append(path[end].size()).append("\n");
-        for (int c : path[end]) {
-            sb.append(c).append(" ");
+        sb.append(costs[end]).append('\n');
+
+        ArrayList<Integer> path = new ArrayList<>();
+        int cur = end;
+        while (cur != 0) {
+            path.add(cur);
+            cur = parent[cur];
+        }
+
+        sb.append(path.size()).append('\n');
+        for (int i = path.size() - 1; i >= 0; i--) {
+            sb.append(path.get(i)).append(" ");
         }
         System.out.println(sb);
     }
