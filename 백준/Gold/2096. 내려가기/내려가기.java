@@ -15,43 +15,33 @@ public class Main {
             map[i][2] = Integer.parseInt(st.nextToken());
         }
 
-        int[][][] dp = new int[N][3][2]; // {x, y, (max/min)}
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < 3; j++) {
-                dp[i][j][1] = Integer.MAX_VALUE;
-            }
+
+        int[] maxDp = new int[3];
+        int[] minDp = new int[3];
+        for (int i = 0; i < 3; i++) {
+            maxDp[i] = map[0][i];
+            minDp[i] = map[0][i];
         }
-        dp[0][0][0] = dp[0][0][1] = map[0][0];
-        dp[0][1][0] = dp[0][1][1] = map[0][1];
-        dp[0][2][0] = dp[0][2][1] = map[0][2];
 
-        for (int i = 0; i < N-1; i++) {
-            for (int j = 0; j < 3; j++) {
-                // 1. 바로 아래 수로 넘어가는 경우
-                dp[i+1][j][0] = Math.max(dp[i+1][j][0], dp[i][j][0] + map[i+1][j]);
-                dp[i+1][j][1] = Math.min(dp[i+1][j][1], dp[i][j][1] + map[i+1][j]);
+        for (int i = 1; i < N; i++) {
+            int[] maxPrev = { maxDp[0], maxDp[1], maxDp[2] };
+            int[] minPrev = { minDp[0], minDp[1], minDp[2] };
 
-                // 2. 바로 아래의 수와 붙어있는 수로 이동하는 경우
-                if (j == 0) {
-                    dp[i+1][j+1][0] = Math.max(dp[i+1][j+1][0], dp[i][j][0] + map[i+1][j+1]);
-                    dp[i+1][j+1][1] = Math.min(dp[i+1][j+1][1], dp[i][j][1] + map[i+1][j+1]);
-                } else if (j == 1) {
-                    dp[i+1][j+1][0] = Math.max(dp[i+1][j+1][0], dp[i][j][0] + map[i+1][j+1]);
-                    dp[i+1][j+1][1] = Math.min(dp[i+1][j+1][1], dp[i][j][1] + map[i+1][j+1]);
-                    dp[i+1][j-1][0] = Math.max(dp[i+1][j-1][0], dp[i][j][0] + map[i+1][j-1]);
-                    dp[i+1][j-1][1] = Math.min(dp[i+1][j-1][1], dp[i][j][1] + map[i+1][j-1]);
-                } else {
-                    dp[i+1][j-1][0] = Math.max(dp[i+1][j-1][0], dp[i][j][0] + map[i+1][j-1]);
-                    dp[i+1][j-1][1] = Math.min(dp[i+1][j-1][1], dp[i][j][1] + map[i+1][j-1]);
-                }
-            }
+            maxDp[0] = Math.max(maxPrev[0], maxPrev[1]) + map[i][0];
+            minDp[0] = Math.min(minPrev[0], minPrev[1]) + map[i][0];
+
+            maxDp[1] = Math.max(Math.max(maxPrev[0], maxPrev[1]), maxPrev[2]) + map[i][1];
+            minDp[1] = Math.min(Math.min(minPrev[0], minPrev[1]), minPrev[2]) + map[i][1];
+
+            maxDp[2] = Math.max(maxPrev[1], maxPrev[2]) + map[i][2];
+            minDp[2] = Math.min(minPrev[1], minPrev[2]) + map[i][2];
         }
 
         int max = 0;
         int min = Integer.MAX_VALUE;
         for (int i = 0; i < 3; i++) {
-            max = Math.max(max, dp[N-1][i][0]);
-            min = Math.min(min, dp[N-1][i][1]);
+            max = Math.max(max, maxDp[i]);
+            min = Math.min(min, minDp[i]);
         }
 
         System.out.println(max + " " + min);
