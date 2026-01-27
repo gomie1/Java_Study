@@ -6,33 +6,32 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
+        int[] S = new int[N];
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] A = new int[N];
         for (int i = 0; i < N; i++) {
-            A[i] = Integer.parseInt(st.nextToken());
+            S[i] = Integer.parseInt(st.nextToken());
         }
 
-        int[] increase = new int[N];
+        int[] dp_up = new int[N];
         for (int i = 0; i < N; i++) {
-            increase[i] = 1;
+            dp_up[i] = 1;
             for (int j = 0; j < i; j++) {
-                if (A[j] < A[i]) increase[i] = Math.max(increase[i], increase[j] + 1);
+                if (S[j] < S[i]) dp_up[i] = Math.max(dp_up[i], dp_up[j]+1);
             }
         }
 
-        int[] decrease = new int[N];
+        int[] dp_down = new int[N];
         for (int i = N-1; i >= 0; i--) {
-            decrease[i] = 1;
+            dp_down[i] = 1;
             for (int j = N-1; j > i; j--) {
-                if (A[j] < A[i]) decrease[i] = Math.max(decrease[i], decrease[j] + 1);
+                if (S[j] < S[i]) dp_down[i] = Math.max(dp_down[i], dp_down[j]+1);
             }
         }
 
         int max = 0;
         for (int i = 0; i < N; i++) {
-            max = Math.max(max, increase[i] + decrease[i] - 1);
+            max = Math.max(max, dp_up[i] + dp_down[i] - 1);
         }
-
         System.out.println(max);
     }
 }
