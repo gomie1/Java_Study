@@ -8,18 +8,16 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        int[] coin = new int[N];
+        int[] A = new int[N];
         for (int i = 0; i < N; i++) {
-            coin[i] = Integer.parseInt(br.readLine());
+            A[i] = Integer.parseInt(br.readLine());
         }
 
         int ans = 0;
         for (int i = N-1; i >= 0; i--) {
-            if (coin[i] > K) continue;
-
-            int cnt = K / coin[i];
-            ans += cnt;
-            K -= cnt * coin[i];
+            ans += K / A[i];
+            K -= (K / A[i]) * A[i];
+            if (K <= 0) break;
         }
 
         System.out.println(ans);
