@@ -1,28 +1,16 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
     public int solution(int[] nums) {
-        HashMap<Integer, Integer> map = new HashMap<>();
+        HashSet<Integer> pocketmon = new HashSet<>();
         for (int n : nums) {
-            map.put(n, map.getOrDefault(n, 0) + 1);    
+            if (!pocketmon.contains(n)) pocketmon.add(n);
         }
         
-        int total = nums.length / 2;
-        ArrayDeque<Integer> chosen = new ArrayDeque<>();
-        int cnt = 0;
-        
-        while (cnt < total) {
-            List<Integer> keys = new ArrayList<>(map.keySet());
-            for (int n : keys) {
-                if (!chosen.contains(n)) chosen.add(n);
-                if (++cnt == total) break;
-                
-                if (map.get(n) == 1) map.remove(n);
-                else map.put(n, map.get(n) - 1);
-            }
-        }
-        
-        return chosen.size();
+        int N = nums.length / 2;
+        int answer = 0;
+        if (N <= pocketmon.size()) answer = N;
+        else answer = pocketmon.size();
+        return answer;
     }
 }
