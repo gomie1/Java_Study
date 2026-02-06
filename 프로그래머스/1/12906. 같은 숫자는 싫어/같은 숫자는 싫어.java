@@ -1,18 +1,18 @@
 import java.util.*;
 
 public class Solution {
-    public int[] solution(int[] arr) {
-        ArrayList<Integer> tmp = new ArrayList<>();
-        int preNum = 10;
+    public int[] solution(int []arr) {
+        Stack<Integer> stack = new Stack<>();
         for (int n : arr) {
-            if (preNum != n) tmp.add(n);
-            preNum = n;
+            if (stack.isEmpty() || stack.peek() != n) stack.add(n);
         }
         
-        int[] answer = new int[tmp.size()];
-        for (int i = 0; i < tmp.size(); i++) {
-            answer[i] = tmp.get(i);
-        }
+        Stack<Integer> stack2 = new Stack<>();
+        while (!stack.isEmpty()) stack2.add(stack.pop());
+        
+        int[] answer = new int[stack2.size()];
+        int idx = 0;
+        while (!stack2.isEmpty()) answer[idx++] = stack2.pop();
         
         return answer;
     }
