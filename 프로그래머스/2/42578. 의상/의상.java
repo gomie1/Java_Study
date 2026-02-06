@@ -1,19 +1,16 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
     public int solution(String[][] clothes) {
         HashMap<String, Integer> map = new HashMap<>();
-        for (String[] arr : clothes) {
-            map.put(arr[1], map.getOrDefault(arr[1], 1) + 1);
+        for (String[] s : clothes) {
+            map.put(s[1], map.getOrDefault(s[1], 1) + 1);
         }
         
         int answer = 1;
-        ArrayList<String> keys = new ArrayList<>(map.keySet());
-        for (String s : keys) {
-            answer *= map.get(s);
+        for (String key : map.keySet()) {
+            answer *= map.get(key);
         }
-        
         return answer - 1;
     }
 }
