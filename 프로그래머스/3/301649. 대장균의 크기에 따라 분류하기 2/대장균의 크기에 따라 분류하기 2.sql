@@ -1,5 +1,5 @@
 -- 코드를 작성해주세요
-SELECT ID, 
+SELECT ID,
        CASE
            WHEN PER = 1 THEN 'CRITICAL'
            WHEN PER = 2 THEN 'HIGH'
