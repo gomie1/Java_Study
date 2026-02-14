@@ -1,5 +1,5 @@
 -- 코드를 입력하세요
-SELECT CAR_ID, 
+SELECT CAR_ID,
        CASE
            WHEN MAX('2022-10-16' BETWEEN START_DATE AND END_DATE) = 1 THEN '대여중'
            ELSE '대여 가능'
