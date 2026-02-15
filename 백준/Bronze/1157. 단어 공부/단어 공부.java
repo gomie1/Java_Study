@@ -7,22 +7,32 @@ public class Main {
         String str = br.readLine();
         str = str.toUpperCase();
 
-        HashMap<Character, Integer> map = new HashMap<>();
+        char[] alpha = new char[26];
+        char val = 'A';
+        for (int i = 0; i < 26; i++) {
+            alpha[i] = val++;
+        }
+
+        int[] cnt = new int[26];
         for (char c : str.toCharArray()) {
-            map.put(c, map.getOrDefault(c,  0) + 1);
+            cnt[c - 'A']++;
         }
 
-        Character ans = 'a';
-        int maxCnt = 0;
-        int cnt = 1;
-        for (char key : map.keySet()) {
-            if (maxCnt < map.get(key)) {
-                ans = key;
-                maxCnt = map.get(key);
-                cnt = 1;
-            } else if (maxCnt == map.get(key)) cnt++;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> {
+            return o2[1] - o1[1];
+        });
+        for (int i = 0; i < 26; i++) {
+            if (cnt[i] != 0) pq.offer(new int[] {i, cnt[i]});
         }
 
-        System.out.println(cnt == 1 ? ans : '?');
+        int[] max = pq.poll();
+        boolean flag = false;
+        if (!pq.isEmpty()) {
+            int[] nxt = pq.poll();
+            if (nxt[1] == max[1]) flag = true;
+        }
+
+        if (flag) System.out.println('?');
+        else System.out.println(alpha[max[0]]);
     }
 }
