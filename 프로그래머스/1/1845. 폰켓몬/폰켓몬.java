@@ -2,11 +2,14 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] nums) {
-        HashSet<Integer> pocketmon = new HashSet<>();
-        for (int n : nums) {
-            if (!pocketmon.contains(n)) pocketmon.add(n);
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
         }
         
-        return Math.min(nums.length / 2, pocketmon.size());
+        int answer = 0;
+        if (set.size() < nums.length / 2) answer = set.size();
+        else answer = nums.length / 2;
+        return answer;
     }
 }
