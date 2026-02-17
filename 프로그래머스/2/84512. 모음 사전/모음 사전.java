@@ -1,23 +1,24 @@
+import java.util.*;
+
 class Solution {
-    int answer = 0;
-    int ans = 0;
+    static char[] alpha = {'A', 'E', 'I', 'O', 'U'};
+    static HashMap<String, Integer> dictionary;
+    static int num;
     
     public int solution(String word) {
-        permutation("", word, 0);
-        return answer;
+        dictionary = new HashMap<>();
+        num = 1;
+        makeWords(0, "");
+        return dictionary.get(word);
     }
     
-    private void permutation(String str, String word, int cnt) {
-        if(str.equals(word)) {
-            answer = ans;
-            return;
-        }
+    static void makeWords(int cnt, String word) {
+        if (!word.isEmpty() && !dictionary.containsKey(word)) dictionary.put(word, num++);
         
-        if(cnt == 5) return;
+        if (cnt == 5) return;
         
-        for(String s : new String[] {"A", "E", "I", "O", "U"}) {
-            ans++;
-            permutation(str+s, word, cnt+1);
+        for (int i = 0; i < 5; i++) {
+            makeWords(cnt+1, word+alpha[i]);
         }
     }
 }
