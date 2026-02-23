@@ -15,33 +15,22 @@ public class Main {
             }
         }
 
-
-        int[][] result = new int[N][N];
-        for (int i = 0; i < N; i++) {
-            Queue<Integer> q = new LinkedList<>();
-            boolean[] visited = new boolean[N];
-
-            q.offer(i);
-
-            while (!q.isEmpty()) {
-                int cur = q.poll();
-
+        for (int k = 0; k < N; k++) {
+            for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                    if (graph[cur][j] == 1 && !visited[j]) {
-                        q.offer(j);
-                        visited[j] = true;
-                        result[i][j] = 1;
-                    }
+                    if (graph[i][k] == 1 && graph[k][j] == 1) graph[i][j] = 1;
                 }
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int[] row : result) {
-            for (int val : row) sb.append(val).append(" ");
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                sb.append(graph[i][j]).append(" ");
+            }
             sb.append('\n');
         }
 
-        System.out.print(sb);
+        System.out.println(sb);
     }
 }
