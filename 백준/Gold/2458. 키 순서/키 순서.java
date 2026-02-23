@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static final int INF = 1_000_000;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -34,9 +32,8 @@ public class Main {
                 if (i == j) continue;
                 if (check[i][j] || check[j][i]) cnt++;
             }
-
-            // 본인을 제외한 모든 사람과의 관계가 있다면 순위를 알 수 있음
-            if (cnt == N-1) ans++;
+            
+            if (cnt == N-1) ans++; // 본인을 제외한 모든 사람과의 관계가 있다면 순위를 알 수 있음
         }
 
         System.out.println(ans);
