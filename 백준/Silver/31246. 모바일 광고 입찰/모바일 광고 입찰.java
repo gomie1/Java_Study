@@ -24,7 +24,7 @@ public class Main {
         }
 
         int ans = 0;
-        while (cnt < K) {
+        while (cnt < K && !pq.isEmpty()) {
             ans = pq.poll();
             cnt++;
         }
