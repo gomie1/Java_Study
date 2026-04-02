@@ -8,7 +8,7 @@ public class Main {
     static int[] dx = {-1, 1, 0, 0};
     static int[] dy = {0, 0, -1, 1};
 
-    public static void main(String[] args) throws IOException {
+    public static void main (String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
@@ -22,29 +22,14 @@ public class Main {
             }
         }
 
-        visited = new boolean[N][M];
         ans = 0;
+        visited = new boolean[N][M];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 visited[i][j] = true;
                 dfs(i, j, 1, arr[i][j]);
                 visited[i][j] = false;
-            }
-        }
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                // 'ㅗ' 모양
-                if (i-1 >= 0 && j-1 >= 0 && j+1 < M) ans = Math.max(ans, arr[i][j] + arr[i][j-1] + arr[i][j+1] + arr[i-1][j]);
-
-                // 'ㅜ' 모양
-                if (i+1 < N && j-1 >= 0 && j+1 < M) ans = Math.max(ans, arr[i][j] + arr[i][j-1] + arr[i][j+1] + arr[i+1][j]);
-
-                // 'ㅏ' 모양
-                if (i-1 >= 0 && i+1 < N && j+1 < M) ans = Math.max(ans, arr[i][j] + arr[i-1][j] + arr[i+1][j] + arr[i][j+1]);
-
-                // 'ㅓ' 모양'
-                if (i-1 >= 0 && i+1 < N && j-1 >= 0) ans = Math.max(ans, arr[i][j] + arr[i-1][j] + arr[i+1][j] + arr[i][j-1]);
+                poly(i, j);
             }
         }
 
@@ -52,7 +37,6 @@ public class Main {
     }
 
     static void dfs(int x, int y, int cnt, int sum) {
-        if (cnt > 4) return;
         if (cnt == 4) {
             ans = Math.max(ans, sum);
             return;
@@ -68,5 +52,19 @@ public class Main {
             dfs(nx, ny, cnt+1, sum+arr[nx][ny]);
             visited[nx][ny] = false;
         }
+    }
+
+    static void poly(int x, int y) {
+        // ㅜ
+        if (y-1 >= 0 && y+1 < M && x+1 < N) ans = Math.max(ans, arr[x][y-1] + arr[x][y] + arr[x][y+1] + arr[x+1][y]);
+
+        // ㅓ
+        if (x-1 >= 0 && x+1 < N && y-1 >= 0) ans = Math.max(ans, arr[x-1][y] + arr[x][y] + arr[x+1][y] + arr[x][y-1]);
+
+        // ㅗ
+        if (y-1 >= 0 && y+1 < M && x-1 >= 0) ans = Math.max(ans, arr[x][y-1] + arr[x][y] + arr[x][y+1] + arr[x-1][y]);
+
+        // ㅏ
+        if (x-1 >= 0 && x+1 < N && y+1 < M) ans = Math.max(ans, arr[x-1][y] + arr[x][y] + arr[x+1][y] + arr[x][y+1]);
     }
 }
