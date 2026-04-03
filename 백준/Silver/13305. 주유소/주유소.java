@@ -23,8 +23,7 @@ public class Main {
         long[] cost = new long[N];
         cost[0] = price[0];
         for (int i = 1; i < N; i++) {
-            if (price[i-1] < price[i]) cost[i] = cost[i-1];
-            else cost[i] = price[i];
+            cost[i] = Math.min(cost[i-1], price[i]);
         }
 
         long total = 0;
