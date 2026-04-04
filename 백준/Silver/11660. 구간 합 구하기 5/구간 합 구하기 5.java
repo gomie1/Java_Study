@@ -1,40 +1,40 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader (System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		StringBuilder sb = new StringBuilder();
-		
-		int N = Integer.parseInt(st.nextToken()); // 표의 크기
-		int M = Integer.parseInt(st.nextToken()); // 합을 구해야 하는 횟수
-		
-		// 누적합 배열 생성 및 계산
-		int[][] mtrx = new int[N+1][N+1];
-		for(int i = 1; i < N+1; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j = 1; j < N+1; j++) {
-				int value = Integer.parseInt(st.nextToken());
-				mtrx[i][j] = mtrx[i-1][j] + mtrx[i][j-1] - mtrx[i-1][j-1] + value;
-			}
-		}
-		
-		int x1, x2, y1, y2, res;
-		for(int i = 0; i < M; i++) {
-			res = 0;
-			
-			st = new StringTokenizer(br.readLine());
-			x1 = Integer.parseInt(st.nextToken());
-			y1 = Integer.parseInt(st.nextToken());
-			x2 = Integer.parseInt(st.nextToken());
-			y2 = Integer.parseInt(st.nextToken());
-			
-			res = mtrx[x2][y2] - mtrx[x2][y1-1] - mtrx[x1-1][y2] + mtrx[x1-1][y1-1];
-			sb.append(res + "\n");
-		}
-		System.out.println(sb);
-	}
+    public static void main (String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        int[][] arr = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        // 누적 합 계산
+        int[][] sumArr = new int[N+1][N+1];
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                sumArr[i][j] = sumArr[i][j-1] + sumArr[i-1][j] + arr[i-1][j-1] - sumArr[i-1][j-1];
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int x1 = Integer.parseInt(st.nextToken());
+            int y1 = Integer.parseInt(st.nextToken());
+            int x2 = Integer.parseInt(st.nextToken());
+            int y2 = Integer.parseInt(st.nextToken());
+
+            sb.append(sumArr[x2][y2] - sumArr[x1-1][y2] - sumArr[x2][y1-1] + sumArr[x1-1][y1-1]).append('\n');
+        }
+
+        System.out.println(sb);
+    }
 }
