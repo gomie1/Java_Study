@@ -32,12 +32,11 @@ public class Main {
 
         int rank = 1;
         for (int i = 1; i < N; i++) {
+            if (score[i][1] != score[i-1][1] || score[i][2] != score[i-1][2] || score[i][3] != score[i-1][3]) rank = i+1;
             if (score[i][0] == K) {
                 System.out.println(rank);
                 return;
             }
-
-            if (score[i][1] != score[i-1][1] || score[i][2] != score[i-1][2] || score[i][3] != score[i-1][3]) rank = i+1;
         }
     }
 }
