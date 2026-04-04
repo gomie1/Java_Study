@@ -30,16 +30,18 @@ public class Main {
         }
 
         int lank = 1;
+        int cnt = 1;
         int[] prev = {cur[1], cur[2], cur[3]};
         while (!score.isEmpty()) {
             cur = score.poll();
             if (prev[0] != cur[1] || prev[1] != cur[2] || prev[2] != cur[3]) {
-                lank++;
+                lank += cnt;
+                cnt = 1;
 
                 prev[0] = cur[1];
                 prev[1] = cur[2];
                 prev[2] = cur[3];
-            }
+            } else cnt++;
 
             if (cur[0] == K) {
                 System.out.println(lank);
