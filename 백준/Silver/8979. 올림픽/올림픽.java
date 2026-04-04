@@ -8,45 +8,36 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        PriorityQueue<int[]> score = new PriorityQueue<>((o1, o2) -> {
+        int[][] score = new int[N][4];
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+
+            score[i][0] = Integer.parseInt(st.nextToken()); // country
+            score[i][1] = Integer.parseInt(st.nextToken()); // gold
+            score[i][2] = Integer.parseInt(st.nextToken()); // silver
+            score[i][3] = Integer.parseInt(st.nextToken()); // bronze
+        }
+
+        // 금 -> 은 -> 동 순으로 정렬
+        Arrays.sort(score, (o1, o2) -> {
             if (o1[1] != o2[1]) return o2[1] - o1[1];
             if (o1[2] != o2[2]) return o2[2] - o1[2];
             return o2[3] - o1[3];
         });
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            int country = Integer.parseInt(st.nextToken());
-            int gold = Integer.parseInt(st.nextToken());
-            int silver = Integer.parseInt(st.nextToken());
-            int bronze = Integer.parseInt(st.nextToken());
 
-            score.add(new int[] {country, gold, silver, bronze});
-        }
-
-        int[] cur = score.poll();
-        if (cur[0] == K) {
+        if (score[0][0] == K) {
             System.out.println(1);
             return;
         }
 
-        int lank = 1;
-        int cnt = 1;
-        int[] prev = {cur[1], cur[2], cur[3]};
-        while (!score.isEmpty()) {
-            cur = score.poll();
-            if (prev[0] != cur[1] || prev[1] != cur[2] || prev[2] != cur[3]) {
-                lank += cnt;
-                cnt = 1;
-
-                prev[0] = cur[1];
-                prev[1] = cur[2];
-                prev[2] = cur[3];
-            } else cnt++;
-
-            if (cur[0] == K) {
-                System.out.println(lank);
-                break;
+        int rank = 1;
+        for (int i = 1; i < N; i++) {
+            if (score[i][0] == K) {
+                System.out.println(rank);
+                return;
             }
+
+            if (score[i][1] != score[i-1][1] || score[i][2] != score[i-1][2] || score[i][3] != score[i-1][3]) rank = i+1;
         }
     }
 }
