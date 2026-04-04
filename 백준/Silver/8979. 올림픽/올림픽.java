@@ -2,41 +2,47 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main (String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        int[][] infos = new int[N][4]; // [국가번호, 금, 은, 동]
+        PriorityQueue<int[]> score = new PriorityQueue<>((o1, o2) -> {
+            if (o1[1] != o2[1]) return o2[1] - o1[1];
+            if (o1[2] != o2[2]) return o2[2] - o1[2];
+            return o2[3] - o1[3];
+        });
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            int num = Integer.parseInt(st.nextToken());
-            infos[i] = new int[] {
-                num,
-                Integer.parseInt(st.nextToken()),
-                Integer.parseInt(st.nextToken()),
-                Integer.parseInt(st.nextToken())
-            };
+            int country = Integer.parseInt(st.nextToken());
+            int gold = Integer.parseInt(st.nextToken());
+            int silver = Integer.parseInt(st.nextToken());
+            int bronze = Integer.parseInt(st.nextToken());
+
+            score.add(new int[] {country, gold, silver, bronze});
         }
 
-        // 금 -> 은 -> 동 내림차순 정렬
-        Arrays.sort(infos, (a, b) -> {
-            if (a[1] != b[1]) return b[1] - a[1];
-            if (a[2] != b[2]) return b[2] - a[2];
-            return b[3] - a[3];
-        });
+        int[] cur = score.poll();
+        if (cur[0] == K) {
+            System.out.println(1);
+            return;
+        }
 
-        int rank = 1;
-        for (int i = 0; i < N; i++) {
-            if (i > 0) {
-                if (infos[i-1][1] != infos[i][1] ||
-                    infos[i-1][2] != infos[i][2] ||
-                    infos[i-1][3] != infos[i][3]) rank = i + 1;
+        int lank = 1;
+        int[] prev = {cur[1], cur[2], cur[3]};
+        while (!score.isEmpty()) {
+            cur = score.poll();
+            if (prev[0] != cur[1] || prev[1] != cur[2] || prev[2] != cur[3]) {
+                lank++;
+
+                prev[0] = cur[1];
+                prev[1] = cur[2];
+                prev[2] = cur[3];
             }
 
-            if (infos[i][0] == K) {
-                System.out.println(rank);
+            if (cur[0] == K) {
+                System.out.println(lank);
                 break;
             }
         }
