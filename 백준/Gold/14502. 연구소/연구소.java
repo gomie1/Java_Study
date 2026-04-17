@@ -2,35 +2,37 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N, M, map[][], pos[][], copyMap[][], ans;
-    static ArrayList<int[]> zero;
-    static boolean[][] visited;
+    static int N, M, map[][], selected[], copyMap[][], ans;
+    static ArrayList<int[]> empty = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+
+    public static void main (String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
         map = new int[N][M]; // 0: 빈 칸, 1: 벽, 2: 바이러스
-        zero = new ArrayList<>();
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < M; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
-                if (map[i][j] == 0) zero.add(new int[] {i, j});
+                if (map[i][j] == 0) empty.add(new int[] {i, j});
             }
         }
 
-        pos = new int[3][2];
+        // 1. 벽을 세울 위치 3개 고르기
+        selected = new int[3];
         ans = 0;
         combination(0, 0);
+
         System.out.println(ans);
     }
 
-    static void combination(int cnt, int start) {
-        if (cnt == 3) {
-            // 바이러스 퍼뜨리기
+    static void combination(int start, int cnt) {
+        if (cnt == 3) { // 2. 벽을 세울 3칸을 다 골랐다면, 바이러스 퍼뜨리기
             copyMap = new int[N][M];
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
@@ -38,54 +40,40 @@ public class Main {
                 }
             }
 
-            // 벽 세우기
-            for (int i = 0; i < 3; i++) {
-                copyMap[pos[i][0]][pos[i][1]] = 1;
+            // 선택한 위치에 벽 세우기
+            for (int idx : selected) {
+                int x = empty.get(idx)[0];
+                int y = empty.get(idx)[1];
+                copyMap[x][y] = 1;
             }
 
-            // 안전구역 찾기
-            ans = Math.max(ans, findSafe());
+            bfs(); // 바이러스 퍼뜨리기
 
-            // 원상복구
-            for (int i = 0; i < 3; i++) {
-                map[pos[i][0]][pos[i][1]] = 0;
+            // 3. 안전구역 개수 카운팅
+            int safe = 0;
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if (copyMap[i][j] == 0) safe++;
+                }
             }
+
+            ans = Math.max(ans, safe);
             return;
         }
 
-        for (int i = start; i < zero.size(); i++) {
-            pos[cnt] = zero.get(i);
-            combination(cnt+1, i+1);
+        for (int i = start; i < empty.size(); i++) {
+            selected[cnt] = i;
+            combination(i+1, cnt+1);
         }
     }
 
-    static int findSafe() {
-        visited = new boolean[N][M];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (copyMap[i][j] == 2 && !visited[i][j]) {
-                    bfs(i, j);
-                }
-            }
-        }
-
-        // 안전 구역 개수 카운팅
-        int cnt = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (copyMap[i][j] == 0) cnt++;
-            }
-        }
-        return cnt;
-    }
-
-    static void bfs(int sx, int sy) {
+    static void bfs() {
         Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[] {sx, sy});
-        visited[sx][sy] = true;
-
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (copyMap[i][j] == 2) q.add(new int[] {i, j});
+            }
+        }
 
         while (!q.isEmpty()) {
             int[] cur = q.poll();
@@ -94,10 +82,10 @@ public class Main {
                 int nx = cur[0] + dx[i];
                 int ny = cur[1] + dy[i];
 
-                if (nx < 0 || nx >= N || ny < 0 || ny >= M || visited[nx][ny] || copyMap[nx][ny] != 0) continue;
-                q.offer(new int[] {nx, ny});
+                if (nx < 0 || nx >= N || ny < 0 || ny >= M || copyMap[nx][ny] != 0) continue;
+
+                q.add(new int[] {nx, ny});
                 copyMap[nx][ny] = 2;
-                visited[nx][ny] = true;
             }
         }
     }
