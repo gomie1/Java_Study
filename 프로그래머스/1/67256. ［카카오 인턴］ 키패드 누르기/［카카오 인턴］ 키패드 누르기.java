@@ -1,89 +1,48 @@
+import java.util.*;
+
 class Solution {
+    static int[][] pos = { // 0 ~ 9까지의 위치 정보
+        {3, 1}, {0, 0}, {0, 1}, {0, 2}, {1, 0}, 
+        {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2} 
+    };
+    static StringBuilder sb = new StringBuilder();
+    static int lx, ly, rx, ry;
+    
     public String solution(int[] numbers, String hand) {
-        int[] leftPos = {3, 0};
-        int[] rightPos = {3, 2};
+        // 초기 왼손 위치('*')
+        lx = 3; 
+        ly = 0;
         
-        StringBuilder sb = new StringBuilder();
+        // 초기 오른손 위치('#')
+        rx = 3;
+        ry = 2;
+        
         for (int i = 0; i < numbers.length; i++) {
-            if (numbers[i] == 1) {
-                leftPos[0] = 0;
-                leftPos[1] = 0;
-                sb.append('L');
-            } else if (numbers[i] == 2) {
-                double ld = calDist(leftPos[0], leftPos[1], 0, 1);
-                double rd = calDist(rightPos[0], rightPos[1], 0, 1);
-                if (ld < rd || ((ld == rd) && (hand.equals("left")))) {
-                    leftPos[0] = 0;
-                    leftPos[1] = 1;
-                    sb.append('L');
-                } else if (ld > rd || ((ld == rd) && (hand.equals("right")))) {
-                    rightPos[0] = 0;
-                    rightPos[1] = 1;
-                    sb.append('R');
-                }
-            } else if (numbers[i] == 3) {
-                rightPos[0] = 0;
-                rightPos[1] = 2;
-                sb.append('R');
-            } else if (numbers[i] == 4) {
-                leftPos[0] = 1;
-                leftPos[1] = 0;
-                sb.append('L');
-            } else if (numbers[i] == 5) {
-                double ld = calDist(leftPos[0], leftPos[1], 1, 1);
-                double rd = calDist(rightPos[0], rightPos[1], 1, 1);
-                if (ld < rd || ((ld == rd) && (hand.equals("left")))) {
-                    leftPos[0] = 1;
-                    leftPos[1] = 1;
-                    sb.append('L');
-                } else if (ld > rd || ((ld == rd) && (hand.equals("right")))) {
-                    rightPos[0] = 1;
-                    rightPos[1] = 1;
-                    sb.append('R');
-                }
-            } else if (numbers[i] == 6) {
-                rightPos[0] = 1;
-                rightPos[1] = 2;
-                sb.append('R');
-            } else if (numbers[i] == 7) {
-                leftPos[0] = 2;
-                leftPos[1] = 0;
-                sb.append('L');
-            } else if (numbers[i] == 8) {
-                double ld = calDist(leftPos[0], leftPos[1], 2, 1);
-                double rd = calDist(rightPos[0], rightPos[1], 2, 1);
-                if (ld < rd || ((ld == rd) && (hand.equals("left")))) {
-                    leftPos[0] = 2;
-                    leftPos[1] = 1;
-                    sb.append('L');
-                } else if (ld > rd || ((ld == rd) && (hand.equals("right")))) {
-                    rightPos[0] = 2;
-                    rightPos[1] = 1;
-                    sb.append('R');
-                }
-            } else if (numbers[i] == 9) {
-                rightPos[0] = 2;
-                rightPos[1] = 2;
-                sb.append('R');
-            } else {
-                double ld = calDist(leftPos[0], leftPos[1], 3, 1);
-                double rd = calDist(rightPos[0], rightPos[1], 3, 1);
-                if (ld < rd || ((ld == rd) && (hand.equals("left")))) {
-                    leftPos[0] = 3;
-                    leftPos[1] = 1;
-                    sb.append('L');
-                } else if (ld > rd || ((ld == rd) && (hand.equals("right")))) {
-                    rightPos[0] = 3;
-                    rightPos[1] = 1;
-                    sb.append('R');
-                }
+            int n = numbers[i];
+            
+            if (n == 1 || n == 4 || n == 7) moveLeft(n);
+            else if (n == 3 || n == 6 || n == 9) moveRight(n);
+            else {
+                double l_dist = Math.ceil(Math.sqrt(Math.pow((lx - pos[n][0]), 2) + Math.pow((ly - pos[n][1]), 2)));
+                double r_dist = Math.ceil(Math.sqrt(Math.pow((rx - pos[n][0]), 2) + Math.pow((ry - pos[n][1]), 2)));
+                
+                if (l_dist < r_dist || ((l_dist == r_dist) && hand.equals("left")))  moveLeft(n);
+                else if (l_dist > r_dist || ((l_dist == r_dist) && hand.equals("right"))) moveRight(n);
             }
         }
         
         return sb.toString();
     }
     
-    static double calDist(int x1, int y1, int x2, int y2) {
-        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+    static void moveLeft(int n) {
+        sb.append("L");
+        lx = pos[n][0];
+        ly = pos[n][1];
+    }
+    
+    static void moveRight(int n) {
+        sb.append("R");
+        rx = pos[n][0];
+        ry = pos[n][1];
     }
 }
