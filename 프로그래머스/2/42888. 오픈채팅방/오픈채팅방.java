@@ -2,23 +2,28 @@ import java.util.*;
 
 class Solution {
     public String[] solution(String[] record) {
-        HashMap<String, String> nameMap = new HashMap<>(); // key: ID, value: Nickname
-        int cnt = 0;
+        // 1. ID별 닉네임 저장하기
+        Map<String, String> nickname = new HashMap<>();
         for (String str : record) {
-            String[] cmd = str.split(" ");
-            if (cmd[0].equals("Enter") || cmd[0].equals("Change")) nameMap.put(cmd[1], cmd[2]);
-            if (cmd[0].equals("Enter") || cmd[0].equals("Leave")) cnt++;
+            String[] info = str.split(" ");
+            if (info[0].equals("Leave")) continue;
+            nickname.put(info[1], info[2]);
         }
         
-        String[] answer = new String[cnt];
-        int idx = 0;
+        // 2. 최종 닉네임으로 기록 출력하기
+        List<String> answer = new ArrayList<>();
         for (int i = 0; i < record.length; i++) {
-            String[] cmd = record[i].split(" ");
+            String[] info = record[i].split(" ");
+            if (info[0].equals("Change")) continue;
             
-            if (cmd[0].equals("Enter")) answer[idx++] = nameMap.get(cmd[1]) + "님이 들어왔습니다.";
-            else if (cmd[0].equals("Leave")) answer[idx++] = nameMap.get(cmd[1]) + "님이 나갔습니다.";
+            StringBuilder sb = new StringBuilder();
+            sb.append(nickname.get(info[1]));
+            if (info[0].equals("Enter")) sb.append("님이 들어왔습니다.");
+            if (info[0].equals("Leave")) sb.append("님이 나갔습니다.");
+            
+            answer.add(sb.toString());
         }
         
-        return answer;
+        return answer.toArray(new String[answer.size()]);
     }
 }
