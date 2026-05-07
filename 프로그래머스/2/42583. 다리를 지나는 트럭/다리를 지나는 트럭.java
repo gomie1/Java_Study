@@ -2,32 +2,32 @@ import java.util.*;
 
 class Solution {
     public int solution(int bridge_length, int weight, int[] truck_weights) {
-        Deque<int[]> bridge = new ArrayDeque<>(); // {트럭 번호, 거리}
-        int curWeight = 0; // 현재 다리 위의 트럭 무게의 합
-        int cnt = 0; // 다리를 다 건넌 트럭의 수
-        int answer = 0; // 경과 시간
+        int n = truck_weights.length; // 트럭의 개수
+        Deque<int[]> bridge = new ArrayDeque<>(); // {트럭 번호, 이동 거리}
+        int curWeight = 0; // 현재 다리 위 트럭의 총 무게
+        int answer = 0; // 소요 시간
         
-        int idx = 0; // 트럭 번호
-        int n = truck_weights.length; // 트럭의 수
+        int truck = 0; // 트럭 번호
         while (true) {
             answer++;
             
-            // 트럭 전진
+            // 트럭 이동
             int size = bridge.size();
             for (int i = 0; i < size; i++) {
-                int[] truck = bridge.poll();
-                if (truck[1] + 1 > bridge_length) {
-                    cnt++;
-                    curWeight -= truck_weights[truck[0]];
-                }
-                else bridge.add(new int[] {truck[0], truck[1]+1});
+                int[] cur = bridge.poll();
+                
+                // 현재 트럭이 아직 다리를 다 건너지 않았다면 한 칸 이동
+                if (cur[1] < bridge_length) bridge.add(new int[] {cur[0], cur[1]+1});
+                else curWeight -= truck_weights[cur[0]]; // 다리를 다 건넜다면 내리기
             }
             
-            if (cnt == n) break;
-            if (idx < n && curWeight + truck_weights[idx] <= weight && bridge.size() < bridge_length) {
-                bridge.add(new int[] {idx, 1});
-                curWeight += truck_weights[idx++];
+            // 대기 트럭이 진입할 수 있다면 진입
+            if (truck < n && bridge.size() < bridge_length && curWeight + truck_weights[truck] <= weight) {
+                bridge.add(new int[] {truck, 1});
+                curWeight += truck_weights[truck++];
             }
+            
+            if (truck >= n && bridge.isEmpty()) break;
         }
         
         return answer;
