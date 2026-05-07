@@ -2,19 +2,21 @@ import java.util.*;
 
 class Solution {
     public int solution(String[][] clothes) {
-        // 1. 옷의 종류 별로 가짓 수 카운팅
-        HashMap<String, Integer> map = new HashMap<>();
-        for (String[] s : clothes) {
-            // 해당 옷 종류를 안입는 경우도 존재하기 때문에 기본 값을 1로 초기화
-            map.put(s[1], map.getOrDefault(s[1], 1) + 1);
+        // 1. 종류별 옷 개수 카운팅
+        Map<String, Integer> map = new HashMap<>();
+        for (String[] c : clothes) {
+            map.put(c[1], map.getOrDefault(c[1], 0) + 1);
         }
         
-        // 2. 경우의 수 계산
+        // 옷 종류가 하나라면 한개씩 밖에 입지 못함
+        if (map.size() == 1) return clothes.length;
+        
+        // 2. 경우의 수 구하기
         int answer = 1;
-        for (String key : map.keySet()) {
-            answer *= map.get(key);
+        for (String c : map.keySet()) {
+            answer *= map.get(c) + 1;
         }
         
-        return answer - 1; // 아무것도 입지 않는 공집합의 경우를 하나 빼줌
+        return answer-1;
     }
 }
