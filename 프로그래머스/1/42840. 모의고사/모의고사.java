@@ -2,33 +2,38 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] answers) {
-        // 수포자 1, 2, 3의 찍기 패턴
-        int[] st1 = {1, 2, 3, 4, 5};
-        int[] st2 = {2, 1, 2, 3, 2, 4, 2, 5};
-        int[] st3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+        int[] s1 = {1, 2, 3, 4, 5};
+        int[] s2 = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] s3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
         
-        // 문제 채점
-        int[] score = new int[3];
+        int[][] score = {
+            {1, 0}, {2, 0}, {3, 0}
+        };
         for (int i = 0; i < answers.length; i++) {
-            if (answers[i] == st1[i%5]) score[0]++;
-            if (answers[i] == st2[i%8]) score[1]++;
-            if (answers[i] == st3[i%10]) score[2]++;
+            if (answers[i] == s1[i%5]) score[0][1]++;
+            if (answers[i] == s2[i%8]) score[1][1]++;
+            if (answers[i] == s3[i%10]) score[2][1]++;
         }
         
-        // 최대 점수 찾기
-        int maxScore = 0;
-        for (int i = 0; i < 3; i++) maxScore = Math.max(maxScore, score[i]);
+        Arrays.sort(score, (o1, o2) -> {
+            if (o1[1] != o2[1]) return o2[1] - o1[1];
+            return o1[0] - o2[0];
+        });
         
-        // 최대 점수와 같은 점수를 받은 수포자 찾기
-        ArrayList<Integer> res = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            if (score[i] == maxScore) res.add(i+1);
+        int max = score[0][1];
+        List<Integer> res = new ArrayList<>();
+        res.add(score[0][0]);
+        for (int i = 1; i < 3; i++) {
+            if (score[i][1] < max) break;
+            res.add(score[i][0]);
+            max = Math.max(max, score[i][1]);
         }
         
         int[] answer = new int[res.size()];
         for (int i = 0; i < res.size(); i++) {
             answer[i] = res.get(i);
         }
+        
         return answer;
     }
 }
