@@ -3,19 +3,26 @@ import java.util.*;
 class Solution {
     public String solution(String number, int k) {
         Stack<Character> stack = new Stack<>();
-        int cnt = k;
+        int cnt = 0;
         for (int i = 0; i < number.length(); i++) {
-            char c = number.charAt(i);
-            while (!stack.isEmpty() && stack.peek() < c && cnt-- > 0) {
+            while (!stack.isEmpty() && cnt < k && stack.peek() < number.charAt(i)) {
                 stack.pop();
+                cnt++;
             }
-            stack.push(c);
+            stack.push(number.charAt(i));
         }
         
-        String answer = "";
-        for (int i = 0; i < number.length() - k; i++) {
-            answer += stack.get(i);
+        // 숫자를 다 돌았는데, 아직 제거해야 할 횟수가 남은 경우
+        if (cnt < k) {
+            while (cnt < k) {
+                stack.pop();
+                cnt++;
+            }
         }
-        return answer;
+        
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) sb.append(stack.pop());
+        
+        return sb.reverse().toString();
     }
 }
