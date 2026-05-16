@@ -1,24 +1,29 @@
 import java.util.*;
 
 class Solution {
-    static List<String> dictionary;
     static char[] alphabet = {'A', 'E', 'I', 'O', 'U'};
+    static int answer;
+    static boolean isFound;
     
     public int solution(String word) {
-        // 사전 만들기
-        dictionary = new ArrayList<>();
-        makeDictionary(0, "");
-        Collections.sort(dictionary);
-        
-        return dictionary.indexOf(word) + 1;
+        answer = 0;
+        isFound = false;
+        dfs("", 0, word);
+        return answer;
     }
     
-    static void makeDictionary(int cnt, String word) {
-        if (cnt > 0) dictionary.add(word);
-        if (cnt == 5) return;
+    static void dfs(String cur, int cnt, String word) {
+        if (isFound || cnt > 5) return;
         
+        if (cur.equals(word)) {
+            isFound = true;
+            return;
+        }
+        
+        answer++;
         for (int i = 0; i < 5; i++) {
-            makeDictionary(cnt+1, word+alphabet[i]);
+            if (isFound) return;
+            dfs(cur+alphabet[i], cnt+1, word);
         }
     }
 }
