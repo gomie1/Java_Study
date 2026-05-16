@@ -1,29 +1,31 @@
 import java.util.*;
 
 class Solution {
-    static Set<Integer> set = new HashSet<>();
-    static boolean[] isSelected;
+    static boolean[] selected;
+    static Set<Integer> numSet;
     
     public int solution(String numbers) {
-        isSelected = new boolean[numbers.length()];
-        permutation("", numbers);
+        selected = new boolean[numbers.length()];
+        numSet = new HashSet<>();
+        permutation("", 0, numbers);
         
         int answer = 0;
-        for (int n : set) {
+        for (int n : numSet) {
             if (isPrime(n)) answer++;
         }
-        
         return answer;
     }
     
-    static void permutation(String cur, String numbers) {
-        if (!cur.equals("")) set.add(Integer.parseInt(cur));
+    static void permutation(String num, int cnt, String numbers) {
+        if (numbers.length() < cnt) return;
+        
+        if (!num.isEmpty() && cnt <= numbers.length()) numSet.add(Integer.parseInt(num));
         
         for (int i = 0; i < numbers.length(); i++) {
-            if (!isSelected[i]) {
-                isSelected[i] = true;
-                permutation(cur+numbers.charAt(i), numbers);
-                isSelected[i] = false;
+            if (!selected[i]) {
+                selected[i] = true;
+                permutation(num+numbers.charAt(i), cnt+1, numbers);
+                selected[i] = false;
             }
         }
     }
