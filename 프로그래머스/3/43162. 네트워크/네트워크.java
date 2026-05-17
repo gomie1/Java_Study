@@ -1,11 +1,12 @@
 import java.util.*;
 
 class Solution {
-    static boolean visited[];
+    static boolean[] visited;
     
     public int solution(int n, int[][] computers) {
         visited = new boolean[n];
         int answer = 0;
+        
         for (int i = 0; i < n; i++) {
             if (!visited[i]) {
                 bfs(i, n, computers);
@@ -24,11 +25,11 @@ class Solution {
         while (!q.isEmpty()) {
             int cur = q.poll();
             
-            for (int i = 0; i < n; i++) {
-                if (i == cur) continue;
-                if (!visited[i] && computers[cur][i] == 1) {
-                    q.add(i);
-                    visited[i] = true;
+            for (int nxt = 0; nxt < n; nxt++) {
+                if (nxt == cur || visited[nxt]) continue;
+                if (computers[cur][nxt] == 1) {
+                    q.add(nxt);
+                    visited[nxt] = true;
                 }
             }
         }
