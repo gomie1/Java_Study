@@ -2,24 +2,21 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        Stack<Integer> stack = new Stack<>();
+        int n = progresses.length;
+        int[] time = new int[n];
+        for (int i = 0; i < n; i++) {
+            time[i] = (100 - progresses[i]) / speeds[i];
+            if ((100 - progresses[i]) % speeds[i] != 0) time[i] += 1;
+        }
+        
         List<Integer> res = new ArrayList<>();
+        int cur = time[0];
         int cnt = 0;
-        for (int i = 0; i < progresses.length; i++) {
-            int d = (100 - progresses[i]) / speeds[i];
-            int date = (100 - progresses[i]) % speeds[i] == 0 ? d : d+1;
-            
-            if (stack.isEmpty()) {
-                stack.add(date);
-                cnt++;
-                continue;
-            }
-            
-            if (date <= stack.peek()) cnt++;
+        for (int t : time) {
+            if (t <= cur) cnt++;
             else {
-                stack.pop();
                 res.add(cnt);
-                stack.add(date);
+                cur = t;
                 cnt = 1;
             }
         }
@@ -29,6 +26,7 @@ class Solution {
         for (int i = 0; i < res.size(); i++) {
             answer[i] = res.get(i);
         }
+        
         return answer;
     }
 }
