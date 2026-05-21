@@ -2,26 +2,21 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] routes) {
-        // 1. end(진출 시점)를 기준으로 정렬
+        // 1. 고속도로에서 빨리 나간 순서대로 정렬
+        // -> 모든 차량이 카메라를 한 번은 만나려면 가장 빨리 고속도로를 나간 자동차부터 잡아야 함
         Arrays.sort(routes, (o1, o2) -> {
             return o1[1] - o2[1];
         });
         
-        // 2. 가장 먼저 나가는 차량의 진출 시점에 카메라 설치
         int answer = 0;
-        int camera = routes[0][1];
-        answer++;
-        
-        int n = routes.length;
-        for(int i = 1; i < n; i++) {
-            // 현재 차량의 진입(start) 시점이 이전 차량의 진출(end) 시점보다 전이면 
-            // 해당 차량 구간에는 따로 카메라를 설치하지 않아도 됨 
-            if(routes[i][0] <= camera) continue;
-            else { 
-                // 이전 차량과 현재 차량의 구간이 겹치지 않는 경우 
-                // 현재 차량의 진출 시점에 카메라 설치
-                camera = routes[i][1];
+        // 카메라를 설치한 마지막 위치 (어떤 자동차도 진입할 수 없는 값으로 초기화)
+        int lastPos = -30001;
+        for (int[] route : routes) {
+            // 마지막에 설치된 카메라 위치보다 현재 자동차의 진입 지점이 더 멀다면
+            // 새로운 카메라를 설치해야 함
+            while (lastPos < route[0]) {
                 answer++;
+                lastPos = route[1];
             }
         }
         
