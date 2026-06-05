@@ -2,36 +2,44 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
-        // 1. 각 장르별로 재생 횟수의 총합 구하기 + 노래별로 고유번호 메기고 장르끼리 묶기
-        HashMap<String, Integer> total = new HashMap<>();
-        HashMap<String, List<int[]>> songs = new HashMap<>();
+        // 1. 장르에 고유 번호 부여하기 + 장르별 노래 재생 횟수 저장하기
+        Map<String, Integer> genre = new HashMap<>();
+        Map<Integer, List<int[]>> playCnt = new HashMap<>();
+        int num = 0;
         for (int i = 0; i < genres.length; i++) {
-            total.put(genres[i], total.getOrDefault(genres[i], 0) + plays[i]);
-            songs.computeIfAbsent(genres[i], k -> new ArrayList<>()).add(new int[] {i, plays[i]});
+            if (!genre.containsKey(genres[i])) genre.put(genres[i], num++);
+            
+            List<int[]> lst = playCnt.getOrDefault(genre.get(genres[i]), new ArrayList<>());
+            lst.add(new int[] {i, plays[i]}); // [노래 번호, 재생 횟수]
+            playCnt.put(genre.get(genres[i]), lst);
         }
         
-        // 2. 총 재생 횟수를 기준으로 장르 정렬
-        List<String> sortedGenres = new ArrayList<>(total.keySet());
-        Collections.sort(sortedGenres, (o1, o2) -> {
-            return total.get(o2) - total.get(o1);
-        });
+        // 2. 장르별 총 재생 횟수 계산
+        List<int[]> total = new ArrayList<>();
+        for (int key : playCnt.keySet()) {
+            int sum = 0;
+            List<int[]> lst = playCnt.get(key);
+            for (int[] n : lst) sum += n[1];
+            
+            total.add(new int[] {key, sum});
+        }
         
-        // 3. 총합이 높은 순서대로 장르 내 노래 선택
+        // 3. 장르별 총 재생 횟수 정렬
+        Collections.sort(total, Collections.reverseOrder((o1, o2) -> {
+            return o1[1] - o2[1];
+        }));
+        
+        // 4. 베스트 앨범 생성
         List<Integer> res = new ArrayList<>();
-        for (int i = 0; i < sortedGenres.size(); i++) {
-            List<int[]> lst = songs.get(sortedGenres.get(i));
-            if (lst.size() < 2) {
-                res.add(lst.get(0)[0]); 
-                continue;
-            }
+        for (int[] song : total) {
+            List<int[]> lst = playCnt.get(song[0]);
+            Collections.sort(lst, Collections.reverseOrder((o1, o2) -> {
+                return o1[1] - o2[1];
+            }));
             
-            Collections.sort(lst, (o1, o2) -> {
-                if (o1[1] != o2[1]) return o2[1] - o1[1];
-                return o1[0] - o2[0];
-            });
-            
-            for (int j = 0; j < 2; j++) {
-                res.add(lst.get(j)[0]);
+            for (int i = 0; i < Math.min(lst.size(), 2); i++) {
+                int[] cur = lst.get(i);
+                res.add(cur[0]);
             }
         }
         
