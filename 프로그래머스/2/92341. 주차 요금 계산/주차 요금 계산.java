@@ -2,50 +2,60 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] fees, String[] records) {
-        HashMap<String, Integer> mapIn = new HashMap<>();
-        HashMap<String, Integer> mapSum = new HashMap<>();
+        Map<String, Integer> in = new HashMap<>(); // <차량번호, 입차시간>
+        Map<String, Integer> parkTime = new HashMap<>(); // <차량번호, 누적 주차 시간>
         
-        StringTokenizer st;
+        // 입/출차 시간 계산
         for (String record : records) {
-            st = new StringTokenizer(record);
-            String[] time = st.nextToken().split(":");
-            int minute = 60 * Integer.parseInt(time[0]) + Integer.parseInt(time[1]);
-            String car = st.nextToken();
-            String status = st.nextToken();
+            String[] info = record.split(" ");
             
-            if (status.equals("IN")) mapIn.put(car, minute);
+            if (info[2].equals("IN")) in.put(info[1], timeToMin(info[0]));
             else {
-                int inTime = mapIn.get(car);
-                mapSum.put(car, mapSum.getOrDefault(car, 0) + (minute - inTime));
-                mapIn.remove(car);
-            }
-        }
-        
-        for (String key : mapIn.keySet()) {
-            mapSum.put(key, mapSum.getOrDefault(key, 0) + (1439 - mapIn.get(key)));
-        }
-        
-        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> {
-            if (o1[0] != o2[0]) return o1[0] - o2[0];
-            return o1[1] - o2[1];
-        });
-        for (String key : mapSum.keySet()) {
-            int t = mapSum.get(key);
-            if (t <= fees[0]) pq.offer(new int[] {Integer.parseInt(key), fees[1]});
-            else {
-                int tmp = 0;
-                if ((t - fees[0]) % fees[2] == 0) tmp = (int) (t - fees[0]) / fees[2];
-                else tmp = (int) ((t - fees[0]) / fees[2]) + 1;
+                int outTime = timeToMin(info[0]); // 출차 시간
+                int totalTime = outTime - in.get(info[1]); // 주차 시간
+                parkTime.put(info[1], parkTime.getOrDefault(info[1], 0) + totalTime);
                 
-                int fee = fees[1] + (tmp * fees[3]);
-                pq.offer(new int[] {Integer.parseInt(key), fee});
+                // 현재 차량을 입차 차량에서 삭제
+                in.remove(info[1]);
             }
         }
         
-        int[] answer = new int[mapSum.size()];
-        for (int i = 0; i < mapSum.size(); i++) {
-            answer[i] = pq.poll()[1];
+        // 출차된 내역이 없는 차량에 대해 23:59 출차로 누적 시간 계산
+        int finalTime = timeToMin("23:59");
+        for (String key : in.keySet()) {
+            int totalTime = finalTime - in.get(key); // 주차 시간
+            parkTime.put(key, parkTime.getOrDefault(key, 0) + totalTime);
         }
+        
+        // 차량 번호가 작은 자동차부터 청구해야 하므로 keySet을 만들고 정렬
+        String[] keys = new String[parkTime.size()];
+        int idx = 0;
+        for (String key : parkTime.keySet()) {
+            keys[idx++] = key;
+        }
+        
+        Arrays.sort(keys);
+        
+        int[] answer = new int[parkTime.size()];
+        idx = 0;
+        for (String key : keys) {
+            int t = parkTime.get(key); // 현재 차량의 총 주차 시간
+            
+            // 누적 주차 시간이 기본 시간 이하라면, 기본 요금 청구
+            if (t <= fees[0]) answer[idx++] = fees[1];
+            else { // 기본 시간을 초과하면, 기본 요금에 더해서 초과한 시간에 대해 단위 시간마다 단위 요금을 청구
+                int plusTime = (t - fees[0]) / fees[2];
+                if ((t - fees[0]) % fees[2] != 0) plusTime += 1; // 초과한 시간이 단위 시간으로 나누어 떨어지지 않으면 올림 처리
+                answer[idx++] = fees[1] + (plusTime * fees[3]);
+            }
+        }
+        
         return answer;
+    }
+    
+    static int timeToMin(String time) {
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int min = Integer.parseInt(time.substring(3, 5));
+        return hour * 60 + min;
     }
 }
