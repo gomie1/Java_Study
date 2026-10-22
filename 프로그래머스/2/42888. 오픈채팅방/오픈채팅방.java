@@ -2,26 +2,21 @@ import java.util.*;
 
 class Solution {
     public String[] solution(String[] record) {
-        // 유저 ID별 닉네임 매칭하기
-        Map<String, String> users = new HashMap<>(); // <ID, 닉네임>
-        for (String str : record) {
-            String[] info = str.split(" ");
-            if (info[0].equals("Enter") || info[0].equals("Change")) users.put(info[1], info[2]);
+        Map<String, String> nickname = new HashMap<>();
+        int cnt = 0;
+        for (String r : record) {
+            String[] input = r.split(" ");
+            if (!input[0].equals("Leave")) nickname.put(input[1], input[2]);
+            if (input[0].equals("Enter") || input[0].equals("Leave")) cnt++;
         }
         
-        // 최종 닉네임으로 결과 출력하기
-        List<String> res = new ArrayList<>();
-        for (String str : record) {
-            String[] info = str.split(" ");
-            if (info[0].equals("Change")) continue;
+        String[] answer = new String[cnt];
+        int idx = 0;
+        for (int i = 0; i < record.length; i++) {
+            String[] input = record[i].split(" ");
             
-            if (info[0].equals("Enter")) res.add(users.get(info[1]) + "님이 들어왔습니다.");
-            else res.add(users.get(info[1]) + "님이 나갔습니다.");
-        }
-        
-        String[] answer = new String[res.size()];
-        for (int i = 0; i < res.size(); i++) {
-            answer[i] = res.get(i);
+            if (input[0].equals("Enter")) answer[idx++] = nickname.get(input[1]) + "님이 들어왔습니다.";
+            else if (input[0].equals("Leave")) answer[idx++] = nickname.get(input[1]) + "님이 나갔습니다.";
         }
         
         return answer;
