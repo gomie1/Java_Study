@@ -15,7 +15,10 @@ class Solution {
             return;
         }
         
-        dfs(numbers, target, idx+1, sum+numbers[idx]); // 더하는 경우
-        dfs(numbers, target, idx+1, sum-numbers[idx]); // 빼하는 경우
+        // 현재 숫자를 더하기
+        dfs(numbers, target, idx+1, sum+numbers[idx]);
+        
+        // 현재 숫자를 빼기
+        dfs(numbers, target, idx+1, sum-numbers[idx]);
     }
 }
