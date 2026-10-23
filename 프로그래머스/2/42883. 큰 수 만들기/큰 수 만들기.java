@@ -2,27 +2,28 @@ import java.util.*;
 
 class Solution {
     public String solution(String number, int k) {
-        Stack<Character> stack = new Stack<>();
-        int cnt = 0;
+        Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < number.length(); i++) {
-            while (!stack.isEmpty() && cnt < k && stack.peek() < number.charAt(i)) {
-                stack.pop();
-                cnt++;
+            int n = number.charAt(i) - '0';
+            if (stack.isEmpty() || k == 0 || stack.peek() >= n) stack.push(n);
+            else {
+                if (stack.peek() < n) {
+                    while (!stack.isEmpty() && k > 0 && stack.peek() < n) {
+                        stack.pop();
+                        k--;
+                    }
+                    stack.push(n);
+                }
             }
-            stack.push(number.charAt(i));
         }
         
-        // 숫자를 다 돌았는데, 아직 제거해야 할 횟수가 남은 경우
-        if (cnt < k) {
-            while (cnt < k) {
-                stack.pop();
-                cnt++;
-            }
+        while (k > 0) {
+            stack.pop();
+            k--;
         }
         
         StringBuilder sb = new StringBuilder();
         while (!stack.isEmpty()) sb.append(stack.pop());
-        
         return sb.reverse().toString();
     }
 }
