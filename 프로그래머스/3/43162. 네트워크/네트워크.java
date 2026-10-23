@@ -16,20 +16,19 @@ class Solution {
         return answer;
     }
     
-    static void bfs(int[][] computers, int n, int node) {
-        Queue<Integer> q = new ArrayDeque<>();
-        q.add(node);
-        visited[node] = true;
+    static void bfs(int[][] computers, int n, int start) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        visited[start] = true;
         
         while (!q.isEmpty()) {
             int cur = q.poll();
             
             for (int nxt = 0; nxt < n; nxt++) {
-                if (cur == nxt || visited[nxt]) continue;
-                if (computers[cur][nxt] == 1) {
-                    q.add(nxt);
-                    visited[nxt] = true;
-                }
+                if (nxt == cur || computers[cur][nxt] == 0 || visited[nxt]) continue;
+                
+                q.add(nxt);
+                visited[nxt] = true;
             }
         }
     }
