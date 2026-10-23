@@ -1,15 +1,21 @@
 import java.util.*;
 
 class Solution {
+    static int r, c;
+    
     public int solution(int[][] maps) {
-        return bfs(maps, maps.length, maps[0].length);
+        r = maps.length;
+        c = maps[0].length;
+        
+        bfs(maps);
+        return maps[r-1][c-1] == 1 ? -1 : maps[r-1][c-1];
     }
     
-    static int bfs(int[][] maps, int n, int m) {
-        Queue<int[]> q = new ArrayDeque<>();
-        q.add(new int[] {0, 0, 1}); // 시작 위치는 (0, 0), 첫 위치부터 카운팅
+    static void bfs(int[][] maps) {
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[] {0, 0});
         
-        boolean[][] visited = new boolean[n][m];
+        boolean[][] visited = new boolean[r][c];
         visited[0][0] = true;
         
         int[] dx = {-1, 1, 0, 0};
@@ -17,19 +23,17 @@ class Solution {
         
         while (!q.isEmpty()) {
             int[] cur = q.poll();
-            if (cur[0] == n-1 && cur[1] == m-1) return cur[2];
             
             for (int i = 0; i < 4; i++) {
                 int nx = cur[0] + dx[i];
                 int ny = cur[1] + dy[i];
                 
-                if (nx < 0 || nx >= n || ny < 0 || ny >= m || maps[nx][ny] == 0 || visited[nx][ny]) continue;
+                if (nx < 0 || nx >= r || ny < 0 || ny >= c || visited[nx][ny] || maps[nx][ny] == 0) continue;
                 
-                q.add(new int[] {nx, ny, cur[2]+1});
+                q.add(new int[] {nx, ny});
                 visited[nx][ny] = true;
+                maps[nx][ny] = maps[cur[0]][cur[1]] + 1;
             }
         }
-        
-        return -1;
     }
 }
