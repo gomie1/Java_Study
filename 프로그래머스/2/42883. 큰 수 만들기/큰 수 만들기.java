@@ -5,16 +5,11 @@ class Solution {
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < number.length(); i++) {
             int n = number.charAt(i) - '0';
-            if (stack.isEmpty() || k == 0 || stack.peek() >= n) stack.push(n);
-            else {
-                if (stack.peek() < n) {
-                    while (!stack.isEmpty() && k > 0 && stack.peek() < n) {
-                        stack.pop();
-                        k--;
-                    }
-                    stack.push(n);
-                }
+            while (!stack.isEmpty() && k > 0 && stack.peek() < n) {
+                stack.pop();
+                k--;
             }
+            stack.push(n);
         }
         
         while (k > 0) {
